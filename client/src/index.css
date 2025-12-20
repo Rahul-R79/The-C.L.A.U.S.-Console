@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-neon: #0ff;
+  --color-cyber-dark: #0a0a12;
+  --color-cyber-glass: rgba(255, 255, 255, 0.1);
+  --font-mono: "Share Tech Mono", monospace;
+  --font-sans: "Orbitron", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-cyber-dark text-white font-sans overflow-x-hidden;
+  }
+}
