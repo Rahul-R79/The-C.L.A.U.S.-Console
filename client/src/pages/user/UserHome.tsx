@@ -21,7 +21,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import LoadingScreen from "../../components/LoadingScreen";
 
-const ParentHome = () => {
+const UserHome = () => {
     const navigate = useNavigate();
     const { currentUser, loginWithGoogle, logout } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
@@ -516,4 +516,4 @@ const ParentHome = () => {
     );
 };
 
-export default ParentHome;
+export default UserHome;

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ParentHome from './pages/user/UserHome';
+import UserHome from './pages/user/UserHome';
+import ScannerPage from './pages/user/ScannerPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -8,10 +9,10 @@ function App() {
 		<AuthProvider>
 			<Router>
 				<Routes>
-					<Route path="/" element={<ParentHome />} />
+					<Route path="/" element={<UserHome />} />
 					<Route path="/scanner" element={
 						<ProtectedRoute>
-							<div>Scanner Page (Coming Soon)</div>
+							<ScannerPage />
 						</ProtectedRoute>
 					} />
 				</Routes>
