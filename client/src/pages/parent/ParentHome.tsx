@@ -19,9 +19,12 @@ import FeatureCard from "../../components/FeatureCard";
 import HolographicToyBuilder from "../../components/HolographicToyBuilder";
 import { useAuth } from "../../contexts/AuthContext";
 
+import LoadingScreen from "../../components/LoadingScreen";
+
 const ParentHome = () => {
     const navigate = useNavigate();
     const { currentUser, loginWithGoogle, logout } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(() => {
         return (
@@ -70,22 +73,40 @@ const ParentHome = () => {
         }
     };
 
-    const handleAction = async () => {
+    const handleAction = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+
         if (currentUser) {
             navigate("/scanner");
         } else {
+            setIsLoading(true);
             try {
                 await loginWithGoogle();
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Login failed", error);
+                alert(`Login Failed: ${error.message || 'Unknown error'}. Check console for details.`);
+            } finally {
+                setIsLoading(false);
             }
         }
     };
+
+    const handleLogout = async () => {
+        setIsLoading(true);
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Logout failed", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     return (
         <div
             className='min-h-screen bg-cyber-dark text-white relative overflow-hidden font-sans'
             onClick={handleInteraction}>
+            {isLoading && <LoadingScreen message="UPDATING ACCESS PROTOCOLS..." />}
             <AnimatePresence>
                 {!hasInteracted && (
                     <motion.div
@@ -147,7 +168,7 @@ const ParentHome = () => {
 
                         {currentUser ? (
                             <button
-                                onClick={logout}
+                                onClick={handleLogout}
                                 className="flex items-center gap-2 hover:text-red-500 transition-colors"
                             >
                                 <LogOut size={16} /> <span className="hidden sm:inline">LOGOUT</span>

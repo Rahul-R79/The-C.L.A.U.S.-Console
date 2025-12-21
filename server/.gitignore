@@ -1,3 +1,3 @@
 .env
 node_modules
-config/service-account.json
+src/config/service-account.json
