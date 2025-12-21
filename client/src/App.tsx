@@ -1,8 +1,14 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ParentHome from './pages/parent/ParentHome';
+
 function App() {
 	return (
-		<div>
-			<h1 className="text-3xl font-bold underline">Hello World</h1>
-		</div>
+		<Router>
+			<Routes>
+				<Route path="/" element={<ParentHome />} />
+				<Route path="/scanner" element={<div>Scanner Page (Coming Soon)</div>} />
+			</Routes>
+		</Router>
 	)
 }
 
