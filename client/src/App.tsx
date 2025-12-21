@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ParentHome from './pages/parent/ParentHome';
+import ParentHome from './pages/user/UserHome';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
