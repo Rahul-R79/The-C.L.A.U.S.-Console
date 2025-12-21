@@ -9,15 +9,19 @@ import {
     Cpu,
     Volume2,
     VolumeX,
+    LogOut,
+    LogIn
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import Snowfall from "../../components/Snowfall";
 import FeatureCard from "../../components/FeatureCard";
 import HolographicToyBuilder from "../../components/HolographicToyBuilder";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ParentHome = () => {
     const navigate = useNavigate();
+    const { currentUser, loginWithGoogle, logout } = useAuth();
     const [isMuted, setIsMuted] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(() => {
         return (
@@ -50,7 +54,7 @@ const ParentHome = () => {
 
     const handleInteraction = () => {
         if (audioRef.current && audioRef.current.paused && !isMuted) {
-            audioRef.current.play().catch(() => {});
+            audioRef.current.play().catch(() => { });
         }
     };
 
@@ -62,6 +66,18 @@ const ParentHome = () => {
                 await audioRef.current.play();
             } catch (e) {
                 console.error("Audio play failed:", e);
+            }
+        }
+    };
+
+    const handleAction = async () => {
+        if (currentUser) {
+            navigate("/scanner");
+        } else {
+            try {
+                await loginWithGoogle();
+            } catch (error) {
+                console.error("Login failed", error);
             }
         }
     };
@@ -120,10 +136,30 @@ const ParentHome = () => {
                             C.L.A.U.S.
                         </span>
                     </div>
-                    <div className='hidden md:flex gap-8 text-sm font-mono text-gray-400'>
-                        <span>STATUS: ONLINE</span>
-                        <span>LATENCY: 12ms</span>
-                        <span>SECURE CONN</span>
+                    <div className='flex gap-3 md:gap-8 text-xs md:text-sm font-mono text-gray-400 items-center'>
+                        <span className="hidden sm:inline">STATUS: {currentUser ? "ONLINE" : "OFFLINE"}</span>
+                        {currentUser && (
+                            <span className="text-cyber-neon">
+                                <span className="hidden sm:inline">AGENT: </span>
+                                {currentUser.displayName?.toUpperCase().split(' ')[0]}
+                            </span>
+                        )}
+
+                        {currentUser ? (
+                            <button
+                                onClick={logout}
+                                className="flex items-center gap-2 hover:text-red-500 transition-colors"
+                            >
+                                <LogOut size={16} /> <span className="hidden sm:inline">LOGOUT</span>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={loginWithGoogle}
+                                className="flex items-center gap-2 hover:text-cyber-neon transition-colors"
+                            >
+                                <LogIn size={16} /> <span className="hidden sm:inline">LOGIN</span>
+                            </button>
+                        )}
                     </div>
 
                     {/* Music Control */}
@@ -169,10 +205,10 @@ const ParentHome = () => {
 
                         <div className='flex flex-col sm:flex-row gap-4'>
                             <button
-                                onClick={() => navigate("/scanner")}
+                                onClick={handleAction}
                                 className='px-8 py-4 bg-cyber-neon text-black font-bold tracking-wider hover:bg-white transition-colors flex items-center justify-center gap-2 group rounded-sm shadow-[0_0_15px_rgba(0,255,255,0.3)] hover:shadow-[0_0_25px_rgba(0,255,255,0.5)]'>
                                 <Scan className='w-5 h-5' />
-                                INITIATE SCAN
+                                {currentUser ? "INITIATE SCAN" : "LOGIN TO SCAN"}
                                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
                             </button>
                         </div>

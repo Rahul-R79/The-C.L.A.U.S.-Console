@@ -1,14 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ParentHome from './pages/parent/ParentHome';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
 	return (
-		<Router>
-			<Routes>
-				<Route path="/" element={<ParentHome />} />
-				<Route path="/scanner" element={<div>Scanner Page (Coming Soon)</div>} />
-			</Routes>
-		</Router>
+		<AuthProvider>
+			<Router>
+				<Routes>
+					<Route path="/" element={<ParentHome />} />
+					<Route path="/scanner" element={
+						<ProtectedRoute>
+							<div>Scanner Page (Coming Soon)</div>
+						</ProtectedRoute>
+					} />
+				</Routes>
+			</Router>
+		</AuthProvider>
 	)
 }
 
