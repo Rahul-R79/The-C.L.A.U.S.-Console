@@ -10,10 +10,12 @@ const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 if (!admin.apps.length) {
     try {
         if (serviceAccountPath) {
+            const resolvedPath = path.resolve(process.cwd(), serviceAccountPath);
+
             admin.initializeApp({
-                credential: admin.credential.cert(require(path.resolve(serviceAccountPath))),
+                credential: admin.credential.cert(require(resolvedPath)),
             });
-            console.log('Firebase Admin Initialized via Key File');
+            console.log('Firebase Admin Initialized successfully');
         } else {
             console.warn('No GOOGLE_APPLICATION_CREDENTIALS found. Firebase Admin not initialized.');
         }

@@ -5,21 +5,27 @@ import {
     Camera,
     X,
     ScanLine,
-    FileText,
     CheckCircle,
     ArrowLeft,
+    List
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import Snowfall from "../../components/Snowfall";
+import { uploadScan } from "../../services/scanService";
 
 const ScannerPage = () => {
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
+
     const [dragActive, setDragActive] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [isScanning, setIsScanning] = useState(false);
     const [scanComplete, setScanComplete] = useState(false);
+    const [scanResult, setScanResult] = useState<any>(null);
     const [isCameraActive, setIsCameraActive] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string>("");
 
     const inputRef = useRef<HTMLInputElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -39,23 +45,24 @@ const ScannerPage = () => {
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        if (e.dataTransfer.files?.[0]) {
             handleFile(e.dataTransfer.files[0]);
         }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        if (e.target.files && e.target.files[0]) {
+        if (e.target.files?.[0]) {
             handleFile(e.target.files[0]);
         }
     };
 
     const handleFile = (file: File) => {
         if (!file.type.startsWith("image/")) {
-            alert("Protocol Violation: Only image files are permitted.");
+            setErrorMsg("Protocol Violation: Only image files are permitted.");
             return;
         }
+        setErrorMsg("");
         setSelectedFile(file);
         setPreviewUrl(URL.createObjectURL(file));
         setScanComplete(false);
@@ -70,20 +77,35 @@ const ScannerPage = () => {
         if (inputRef.current) inputRef.current.value = "";
     };
 
+    // Scan processing
     const initiateScan = async () => {
-        if (!selectedFile) return;
+        if (!selectedFile || !currentUser) return;
         setIsScanning(true);
+        setErrorMsg("");
 
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        try {
+            const token = await currentUser.getIdToken();
+            const data = await uploadScan(selectedFile, token);
 
-        setIsScanning(false);
-        setScanComplete(true);
+            if (data.success) {
+                setScanResult(data.data);
+                setScanComplete(true);
+            } else {
+                setErrorMsg("Scan failed: " + data.error);
+            }
+        } catch (error) {
+            setErrorMsg("Error connecting to scanner server.");
+        } finally {
+            setIsScanning(false);
+        }
     };
 
+    // Camera functions
     const startCamera = async () => {
         setIsCameraActive(true);
         setPreviewUrl(null);
         setSelectedFile(null);
+        setErrorMsg("");
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -92,15 +114,14 @@ const ScannerPage = () => {
                 videoRef.current.srcObject = stream;
             }
         } catch (err) {
-            console.error("Error accessing camera:", err);
-            alert("Could not access camera. Please check permissions.");
+            setErrorMsg("Could not access camera. Please check permissions.");
             setIsCameraActive(false);
         }
     };
 
     const stopCamera = () => {
         setIsCameraActive(false);
-        if (videoRef.current && videoRef.current.srcObject) {
+        if (videoRef.current?.srcObject) {
             const stream = videoRef.current.srcObject as MediaStream;
             stream.getTracks().forEach((track) => track.stop());
             videoRef.current.srcObject = null;
@@ -117,7 +138,6 @@ const ScannerPage = () => {
             const context = canvas.getContext("2d");
             if (context) {
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
                 canvas.toBlob((blob) => {
                     if (blob) {
                         const file = new File([blob], "camera_capture.jpg", {
@@ -142,7 +162,16 @@ const ScannerPage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 onClick={() => navigate("/")}
                 className='absolute top-6 left-6 z-20 flex items-center gap-2 text-cyber-neon/70 hover:text-cyber-neon transition-colors font-mono text-xs tracking-widest uppercase mb-8'>
-                <ArrowLeft size={16} /> Return to Console
+                <ArrowLeft size={16} /> <span className="hidden md:inline">Return to Console</span><span className="md:hidden">Back</span>
+            </motion.button>
+
+            {/* Forward Navigation */}
+            <motion.button
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={() => navigate("/wishes")}
+                className='absolute top-6 right-6 z-20 flex items-center gap-2 text-cyber-neon/70 hover:text-cyber-neon transition-colors font-mono text-xs tracking-widest uppercase mb-8'>
+                <span className="hidden md:inline">View Manifest</span><span className="md:hidden">Manifest</span> <List size={16} />
             </motion.button>
 
             <div className='max-w-4xl mx-auto pt-16 relative z-10'>
@@ -168,16 +197,14 @@ const ScannerPage = () => {
                     <div className='lg:col-span-3'>
                         <div
                             className={`relative min-h-100 border-2 border-dashed rounded-2xl transition-all duration-300 flex flex-col items-center justify-center p-8
-                            ${
-                                dragActive
+                            ${dragActive
                                     ? "border-cyber-neon bg-cyber-neon/5 scale-[1.02]"
                                     : "border-white/10 bg-white/5 hover:border-white/20"
-                            }
-                            ${
-                                previewUrl
+                                }
+                            ${previewUrl
                                     ? "border-solid border-cyber-neon/20 bg-black/40"
                                     : ""
-                            }
+                                }
                             `}
                             onDragEnter={handleDrag}
                             onDragLeave={handleDrag}
@@ -293,7 +320,7 @@ const ScannerPage = () => {
                         </div>
                     </div>
 
-                    {/* Controls & Status Sidebar */}
+                    {/* Controls and Status Sidebar */}
                     <div className='lg:col-span-2 space-y-6'>
                         {/* Status Panel */}
                         <div className='bg-black/40 border border-white/10 rounded-xl p-6 min-h-50'>
@@ -324,10 +351,10 @@ const ScannerPage = () => {
                                     <span className='font-mono text-white/80'>
                                         {selectedFile
                                             ? `${(
-                                                  selectedFile.size /
-                                                  1024 /
-                                                  1024
-                                              ).toFixed(2)} MB`
+                                                selectedFile.size /
+                                                1024 /
+                                                1024
+                                            ).toFixed(2)} MB`
                                             : "--"}
                                     </span>
                                 </div>
@@ -339,6 +366,11 @@ const ScannerPage = () => {
                                         {selectedFile ? "~1.2s" : "--"}
                                     </span>
                                 </div>
+                                {errorMsg && (
+                                    <div className='text-red-500 text-xs font-mono animate-pulse mt-2'>
+                                        [ERROR]: {errorMsg}
+                                    </div>
+                                )}
                             </div>
 
                             {selectedFile && !scanComplete && (
@@ -349,11 +381,10 @@ const ScannerPage = () => {
                                     disabled={isScanning}
                                     className={`w-full mt-8 py-4 font-bold tracking-wider flex items-center justify-center gap-2 rounded-sm transition-all
                                     text-black
-                                    ${
-                                        isScanning
+                                    ${isScanning
                                             ? "bg-gray-600 cursor-not-allowed"
                                             : "bg-cyber-neon shadow-[0_0_20px_rgba(0,255,255,0.4)] hover:shadow-[0_0_30px_rgba(0,255,255,0.6)]"
-                                    }
+                                        }
                                     `}>
                                     {isScanning ? (
                                         <>PROCESSING...</>
@@ -377,33 +408,17 @@ const ScannerPage = () => {
                                     <p className='text-green-400/70 text-xs'>
                                         Data extracted successfully.
                                     </p>
-                                    <button className='w-full mt-3 py-2 bg-green-500 text-black font-bold text-xs tracking-widest rounded hover:bg-green-400 transition-colors'>
+                                    <button
+                                        onClick={() =>
+                                            navigate("/result", {
+                                                state: { result: scanResult },
+                                            })
+                                        }
+                                        className='w-full mt-3 py-2 bg-green-500 text-black font-bold text-xs tracking-widest rounded hover:bg-green-400 transition-colors'>
                                         VIEW EXTRACTED DATA
                                     </button>
                                 </motion.div>
                             )}
-                        </div>
-
-                        {/* Recent Scans Mini List */}
-                        <div className='bg-white/5 border border-white/5 rounded-xl p-6 opacity-60 pointer-events-none grayscale'>
-                            <h3 className='text-gray-500 font-mono text-xs tracking-widest mb-4'>
-                                RECENT_LOGS (LOCKED)
-                            </h3>
-                            <div className='space-y-3'>
-                                {[1, 2, 3].map((i) => (
-                                    <div
-                                        key={i}
-                                        className='flex gap-3 items-center border-b border-white/5 pb-3'>
-                                        <div className='w-10 h-10 bg-white/10 rounded flex items-center justify-center'>
-                                            <FileText size={14} />
-                                        </div>
-                                        <div>
-                                            <div className='h-2 w-20 bg-white/10 rounded mb-1' />
-                                            <div className='h-2 w-12 bg-white/5 rounded' />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
                         </div>
                     </div>
                 </div>
