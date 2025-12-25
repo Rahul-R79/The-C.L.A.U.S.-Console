@@ -18,7 +18,6 @@ import {
     approveWish,
 } from "../../services/scanService";
 import { useAuth } from "../../contexts/AuthContext";
-// Removed LoadingScreen import
 
 interface ScanResult {
     personName: string;
@@ -90,8 +89,6 @@ const ScanResultPage = () => {
 
                         setIsGenerating(false);
                         setStatusMessage("Generative Process Complete.");
-                    } else {
-                        console.error("Model URL not found in task:", task);
                         setStatusMessage("Error: Model URL missing.");
                         setIsGenerating(false);
                     }
@@ -107,13 +104,11 @@ const ScanResultPage = () => {
                     alert("Generation Failed.");
                 } else {
                     setStatusMessage(
-                        `Status: ${task.status.toUpperCase()}... (${
-                            task.progress
+                        `Status: ${task.status.toUpperCase()}... (${task.progress
                         }%)`
                     );
                 }
             } catch (error) {
-                console.error("Polling Error", error);
             }
         }, 2000);
     };
@@ -161,7 +156,6 @@ const ScanResultPage = () => {
             );
             navigate("/wishes", { replace: true });
         } catch (error: any) {
-            console.error("Approval failed", error);
             alert(
                 "Approval Failed: " +
                 (error.response?.data?.error || error.message)
@@ -245,16 +239,16 @@ const ScanResultPage = () => {
                                     </label>
                                     <div
                                         className={`text-lg font-bold ${result.sentiment
+                                            .toLowerCase()
+                                            .includes("nice") ||
+                                            result.sentiment
                                                 .toLowerCase()
-                                                .includes("nice") ||
-                                                result.sentiment
-                                                    .toLowerCase()
-                                                    .includes("polite") ||
-                                                result.sentiment
-                                                    .toLowerCase()
-                                                    .includes("sweet")
-                                                ? "text-green-400"
-                                                : "text-yellow-400"
+                                                .includes("polite") ||
+                                            result.sentiment
+                                                .toLowerCase()
+                                                .includes("sweet")
+                                            ? "text-green-400"
+                                            : "text-yellow-400"
                                             }`}>
                                         {result.sentiment}
                                     </div>
@@ -308,8 +302,8 @@ const ScanResultPage = () => {
                                     onClick={handleApprove}
                                     disabled={isApproving}
                                     className={`py-4 bg-green-500 text-black hover:bg-green-400 font-bold tracking-wider rounded-sm transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] flex items-center justify-center gap-2 ${isApproving
-                                            ? "opacity-75 cursor-wait"
-                                            : ""
+                                        ? "opacity-75 cursor-wait"
+                                        : ""
                                         }`}>
                                     {isApproving ? (
                                         <>

@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import ApprovedWishesPage from './pages/user/ApprovedWishesPage';
+import SingleWishPage from './pages/user/SingleWishPage';
 
 import SantaLoginPage from './pages/santa/SantaLoginPage';
 import SantaDashboard from './pages/santa/SantaDashboard';
@@ -34,6 +35,12 @@ function App() {
 							<ApprovedWishesPage />
 						</ProtectedRoute>
 					} />
+					<Route path="/wishes/:id" element={
+						<ProtectedRoute>
+							<SingleWishPage />
+						</ProtectedRoute>
+					} />
+
 
 					{/* Santa Admin Routes */}
 					<Route path="/santa/login" element={<SantaLoginPage />} />

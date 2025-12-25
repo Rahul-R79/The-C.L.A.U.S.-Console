@@ -52,13 +52,12 @@ const SantaDashboard = () => {
                     });
                 }
             } catch (error) {
-                console.error("Dashboard data sync failed");
             } finally {
                 setLoading(false);
             }
         };
         fetchData();
-    }, []); // Run once on mount, independent of currentUser
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("santa_token");
@@ -240,7 +239,7 @@ const SantaDashboard = () => {
                         </motion.div>
                     </div>
 
-                    {/* Live Operations Grid */}
+                    {/* Live gif section */}
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8'>
                         <motion.div
                             variants={itemVariants}

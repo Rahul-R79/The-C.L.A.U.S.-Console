@@ -33,7 +33,7 @@ const ApprovedWishesPage = () => {
                         setWishes(response.data);
                     }
                 } catch (error) {
-                    console.error("Failed to fetch wishes", error);
+                    console.error("Error fetching approved wishes:", error);
                 } finally {
                     setLoading(false);
                 }
@@ -72,16 +72,16 @@ const ApprovedWishesPage = () => {
                                 key={wish._id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className='bg-black/40 border border-white/10 rounded-xl p-6 hover:border-cyber-neon/30 transition-all group'>
+                                onClick={() => navigate(`/wishes/${wish._id}`)}
+                                className='bg-black/40 border border-white/10 rounded-xl p-6 hover:border-cyber-neon/30 transition-all group cursor-pointer'>
                                 <div className='flex justify-between items-start mb-4'>
                                     <div
-                                        className={`px-2 py-1 rounded text-[10px] font-mono tracking-widest uppercase ${
-                                            wish.status === "pending"
-                                                ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/30"
-                                                : wish.status === "denied"
+                                        className={`px-2 py-1 rounded text-[10px] font-mono tracking-widest uppercase ${wish.status === "pending"
+                                            ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/30"
+                                            : wish.status === "denied"
                                                 ? "bg-red-500/10 text-red-500 border border-red-500/30"
                                                 : "bg-cyber-neon/10 text-cyber-neon border border-cyber-neon/30"
-                                        }`}>
+                                            }`}>
                                         {wish.status}
                                     </div>
                                     <span className='text-gray-500 text-xs font-mono'>

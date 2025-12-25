@@ -48,7 +48,6 @@ const UserHome = () => {
                     audioRef.current?.pause();
                 }
             } catch (err) {
-                console.log("audio error", err);
             }
         };
 

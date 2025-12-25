@@ -70,6 +70,14 @@ export const getApprovedWishes = async (token: string) => {
     });
     return response.data;
 };
+
+export const getWishById = async (id: string, token: string) => {
+    const response = await apiClient.get<any>(`/api/v1/scan/wishes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+};
+
 // Santa Admin Services
 export const getSantaWishes = async () => {
     const response = await apiClient.get<any>('/api/v1/scan/santa/wishes');

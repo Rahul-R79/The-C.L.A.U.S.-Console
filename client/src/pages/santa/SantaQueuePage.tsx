@@ -54,7 +54,6 @@ const SantaQueuePage = () => {
                 setWishes(prev => prev.filter(w => w._id !== id));
             }
         } catch (error) {
-            console.error("Action failed", error);
             alert("Failed to process wish. System offline?");
         } finally {
             setProcessingId(null);
@@ -139,8 +138,8 @@ const SantaQueuePage = () => {
                                                 <div className="flex items-center gap-2 text-xs font-mono">
                                                     <span className="text-gray-500">SENTIMENT ANALYSIS:</span>
                                                     <span className={`px-2 py-0.5 rounded ${wish.sentiment.toLowerCase().includes('positive') || wish.sentiment.toLowerCase().includes('good')
-                                                            ? 'bg-green-500/20 text-green-400'
-                                                            : 'bg-red-500/20 text-red-400'
+                                                        ? 'bg-green-500/20 text-green-400'
+                                                        : 'bg-red-500/20 text-red-400'
                                                         }`}>
                                                         {wish.sentiment.toUpperCase()}
                                                     </span>
