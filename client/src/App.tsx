@@ -8,6 +8,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ApprovedWishesPage from './pages/user/ApprovedWishesPage';
 
 import SantaLoginPage from './pages/santa/SantaLoginPage';
+import SantaDashboard from './pages/santa/SantaDashboard';
+import SantaRoute from './components/SantaRoute';
 
 function App() {
 	return (
@@ -34,6 +36,11 @@ function App() {
 
 					{/* Santa Admin Routes */}
 					<Route path="/santa/login" element={<SantaLoginPage />} />
+					<Route path="/santa/dashboard" element={
+						<SantaRoute>
+							<SantaDashboard />
+						</SantaRoute>
+					} />
 				</Routes>
 			</Router>
 		</AuthProvider>
