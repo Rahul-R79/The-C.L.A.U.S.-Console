@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lock, Snowflake, KeyRound, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,15 +11,22 @@ const SantaLoginPage = () => {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        const token = localStorage.getItem("santa_token");
+        if (token) {
+            navigate("/santa/dashboard", { replace: true });
+        }
+    }, [navigate]);
+
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
         setIsLoading(true);
 
         setTimeout(() => {
-            if (email === "santa@claus.com" && password === "hohoho2025") {
+            if (email === import.meta.env.VITE_SANTA_USERNAME  && password === import.meta.env.VITE_SANTA_PASSWORD) {
                 localStorage.setItem("santa_token", "valid_session");
-                navigate("/santa/dashboard");
+                navigate("/santa/dashboard", { replace: true });
             } else {
                 setError("ACCESS DENIED: Invalid Command Codes");
                 setIsLoading(false);
@@ -39,7 +46,7 @@ const SantaLoginPage = () => {
                     className="bg-black/60 border border-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl relative overflow-hidden"
                 >
                     {/* Decorative Top Border */}
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-red-500 to-transparent" />
 
                     <div className="text-center mb-10">
                         <div className="w-16 h-16 bg-red-500/10 border border-red-500/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
