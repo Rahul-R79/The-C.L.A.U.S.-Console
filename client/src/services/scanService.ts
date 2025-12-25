@@ -70,3 +70,13 @@ export const getApprovedWishes = async (token: string) => {
     });
     return response.data;
 };
+// Santa Admin Services
+export const getSantaWishes = async () => {
+    const response = await apiClient.get<any>('/api/v1/scan/santa/wishes');
+    return response.data;
+};
+
+export const updateWishStatus = async (id: string, status: 'pending' | 'approved' | 'denied') => {
+    const response = await apiClient.put<any>(`/api/v1/scan/santa/update/${id}`, { status });
+    return response.data;
+};

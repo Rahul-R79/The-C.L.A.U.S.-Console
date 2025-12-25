@@ -9,6 +9,7 @@ import ApprovedWishesPage from './pages/user/ApprovedWishesPage';
 
 import SantaLoginPage from './pages/santa/SantaLoginPage';
 import SantaDashboard from './pages/santa/SantaDashboard';
+import SantaQueuePage from './pages/santa/SantaQueuePage';
 import SantaRoute from './components/SantaRoute';
 
 function App() {
@@ -39,6 +40,11 @@ function App() {
 					<Route path="/santa/dashboard" element={
 						<SantaRoute>
 							<SantaDashboard />
+						</SantaRoute>
+					} />
+					<Route path="/santa/queue" element={
+						<SantaRoute>
+							<SantaQueuePage />
 						</SantaRoute>
 					} />
 				</Routes>

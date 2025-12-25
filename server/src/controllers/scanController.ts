@@ -130,3 +130,45 @@ export const getWishes = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
+
+export const getSantaWishes = async (req: Request, res: Response) => {
+    try {
+        const wishes = await Wish.find({}).sort({ createdAt: -1 });
+        res.json({
+            success: true,
+            data: wishes
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const updateWishStatus = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!['pending', 'approved', 'denied'].includes(status)) {
+            return res.status(400).json({ success: false, error: "Invalid status" });
+        }
+
+        const updatedWish = await Wish.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true }
+        );
+
+        if (!updatedWish) {
+            return res.status(404).json({ success: false, error: "Wish not found" });
+        }
+
+        res.json({
+            success: true,
+            data: updatedWish
+        });
+
+    } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
