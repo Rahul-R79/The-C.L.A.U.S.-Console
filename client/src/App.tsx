@@ -7,11 +7,14 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import ApprovedWishesPage from './pages/user/ApprovedWishesPage';
 
+import SantaLoginPage from './pages/santa/SantaLoginPage';
+
 function App() {
 	return (
 		<AuthProvider>
 			<Router>
 				<Routes>
+					{/* User Routes */}
 					<Route path="/" element={<UserHome />} />
 					<Route path="/scanner" element={
 						<ProtectedRoute>
@@ -28,6 +31,9 @@ function App() {
 							<ApprovedWishesPage />
 						</ProtectedRoute>
 					} />
+
+					{/* Santa Admin Routes */}
+					<Route path="/santa/login" element={<SantaLoginPage />} />
 				</Routes>
 			</Router>
 		</AuthProvider>
