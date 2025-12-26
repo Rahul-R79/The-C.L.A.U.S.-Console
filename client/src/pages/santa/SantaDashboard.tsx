@@ -10,6 +10,7 @@ import {
     XCircle,
     Activity,
     Map,
+    MessageSquare,
 } from "lucide-react";
 import Snowfall from "../../components/Snowfall";
 import { getSantaWishes } from "../../services/scanService";
@@ -46,9 +47,8 @@ const SantaDashboard = () => {
                         approved: wishes.filter(
                             (w: any) => w.status === "approved"
                         ).length,
-                        denied: wishes.filter(
-                            (w: any) => w.status === "denied"
-                        ).length,
+                        denied: wishes.filter((w: any) => w.status === "denied")
+                            .length,
                     });
                 }
             } catch (error) {
@@ -157,12 +157,16 @@ const SantaDashboard = () => {
                                 Global wish fabrication status and logistics.
                             </p>
                         </div>
-                        <div className='w-full md:w-auto'>
+                        <div className='flex flex-col sm:flex-row gap-4 w-full md:w-auto'>
                             <button
-                                onClick={() => navigate('/santa/queue')}
-                                className='w-full md:w-auto px-4 py-2 bg-cyber-neon text-black font-bold text-sm tracking-wider rounded shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] transition-all flex items-center justify-center gap-2'
-                            >
+                                onClick={() => navigate("/santa/queue")}
+                                className='flex-1 md:flex-none px-6 py-2 bg-cyber-neon text-black font-bold text-sm tracking-wider rounded shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] transition-all flex items-center justify-center gap-2 whitespace-nowrap'>
                                 <LayoutDashboard size={16} /> MANAGE QUEUE
+                            </button>
+                            <button
+                                onClick={() => navigate("/santa/comms")}
+                                className='flex-1 md:flex-none px-6 py-2 border border-cyber-neon text-cyber-neon font-bold text-sm tracking-wider rounded transition-all flex items-center justify-center gap-2 hover:bg-cyber-neon hover:text-black whitespace-nowrap'>
+                                <MessageSquare size={16} /> OPEN COMMS
                             </button>
                         </div>
                     </motion.div>
@@ -238,7 +242,6 @@ const SantaDashboard = () => {
                             </div>
                         </motion.div>
                     </div>
-
                     {/* Live gif section */}
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8'>
                         <motion.div

@@ -15,7 +15,6 @@ if (!admin.apps.length) {
             admin.initializeApp({
                 credential: admin.credential.cert(require(resolvedPath)),
             });
-            console.log('Firebase Admin Initialized successfully');
         } else {
             console.warn('No GOOGLE_APPLICATION_CREDENTIALS found. Firebase Admin not initialized.');
         }

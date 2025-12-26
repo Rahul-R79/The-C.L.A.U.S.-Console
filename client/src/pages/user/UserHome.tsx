@@ -9,7 +9,7 @@ import {
     Volume2,
     VolumeX,
     LogOut,
-    LogIn
+    LogIn,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
@@ -20,6 +20,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import LoadingScreen from "../../components/LoadingScreen";
 import SantaScrollScene from "../../components/SantaScrollScene";
+import CommLinkWidget from "../../components/CommLinkWidget";
 
 const UserHome = () => {
     const navigate = useNavigate();
@@ -47,8 +48,7 @@ const UserHome = () => {
                 } else {
                     audioRef.current?.pause();
                 }
-            } catch (err) {
-            }
+            } catch (err) {}
         };
 
         playAudio();
@@ -56,7 +56,7 @@ const UserHome = () => {
 
     const handleInteraction = () => {
         if (audioRef.current && audioRef.current.paused && !isMuted) {
-            audioRef.current.play().catch(() => { });
+            audioRef.current.play().catch(() => {});
         }
     };
 
@@ -83,7 +83,11 @@ const UserHome = () => {
                 await loginWithGoogle();
             } catch (error: any) {
                 console.error("Login failed", error);
-                alert(`Login Failed: ${error.message || 'Unknown error'}. Check console for details.`);
+                alert(
+                    `Login Failed: ${
+                        error.message || "Unknown error"
+                    }. Check console for details.`
+                );
             } finally {
                 setIsLoading(false);
             }
@@ -99,13 +103,15 @@ const UserHome = () => {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div
             className='min-h-screen bg-cyber-dark text-white relative overflow-hidden font-sans'
             onClick={handleInteraction}>
-            {isLoading && <LoadingScreen message="UPDATING ACCESS PROTOCOLS..." />}
+            {isLoading && (
+                <LoadingScreen message='UPDATING ACCESS PROTOCOLS...' />
+            )}
             <AnimatePresence>
                 {!hasInteracted && (
                     <motion.div
@@ -157,27 +163,35 @@ const UserHome = () => {
                         </span>
                     </div>
                     <div className='flex gap-3 md:gap-8 text-xs md:text-sm font-mono text-gray-400 items-center'>
-                        <span className="hidden sm:inline">STATUS: {currentUser ? "ONLINE" : "OFFLINE"}</span>
+                        <span className='hidden sm:inline'>
+                            STATUS: {currentUser ? "ONLINE" : "OFFLINE"}
+                        </span>
                         {currentUser && (
-                            <span className="text-cyber-neon">
-                                <span className="hidden sm:inline">AGENT: </span>
-                                {currentUser.displayName?.toUpperCase().split(' ')[0]}
+                            <span className='text-cyber-neon'>
+                                <span className='hidden sm:inline'>
+                                    AGENT:{" "}
+                                </span>
+                                {
+                                    currentUser.displayName
+                                        ?.toUpperCase()
+                                        .split(" ")[0]
+                                }
                             </span>
                         )}
 
                         {currentUser ? (
                             <button
                                 onClick={handleLogout}
-                                className="flex items-center gap-2 hover:text-red-500 transition-colors"
-                            >
-                                <LogOut size={16} /> <span className="hidden sm:inline">LOGOUT</span>
+                                className='flex items-center gap-2 hover:text-red-500 transition-colors'>
+                                <LogOut size={16} />{" "}
+                                <span className='hidden sm:inline'>LOGOUT</span>
                             </button>
                         ) : (
                             <button
                                 onClick={loginWithGoogle}
-                                className="flex items-center gap-2 hover:text-cyber-neon transition-colors"
-                            >
-                                <LogIn size={16} /> <span className="hidden sm:inline">LOGIN</span>
+                                className='flex items-center gap-2 hover:text-cyber-neon transition-colors'>
+                                <LogIn size={16} />{" "}
+                                <span className='hidden sm:inline'>LOGIN</span>
                             </button>
                         )}
                     </div>
@@ -228,7 +242,9 @@ const UserHome = () => {
                                 onClick={handleAction}
                                 className='px-8 py-4 bg-cyber-neon text-black font-bold tracking-wider hover:bg-white transition-colors flex items-center justify-center gap-2 group rounded-sm shadow-[0_0_15px_rgba(0,255,255,0.3)] hover:shadow-[0_0_25px_rgba(0,255,255,0.5)]'>
                                 <Scan className='w-5 h-5' />
-                                {currentUser ? "INITIATE SCAN" : "LOGIN TO SCAN"}
+                                {currentUser
+                                    ? "INITIATE SCAN"
+                                    : "LOGIN TO SCAN"}
                                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
                             </button>
                         </div>
@@ -331,7 +347,7 @@ const UserHome = () => {
                 </section>
 
                 {/* section 3: Interactive 3D Scene */}
-                <section className="relative z-10 mb-24">
+                <section className='relative z-10 mb-24'>
                     <SantaScrollScene />
                 </section>
 
@@ -359,6 +375,8 @@ const UserHome = () => {
                     </p>
                 </footer>
             </div>
+
+            <CommLinkWidget />
         </div>
     );
 };
