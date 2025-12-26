@@ -251,17 +251,17 @@ const UserHome = () => {
                     <FeatureCard
                         icon={<Scan className='w-6 h-6 text-cyber-neon' />}
                         title='Neural Scan'
-                        desc='Advanced OCR for handwriting and sketch recognition.'
+                        desc='Advanced OCR for handwriting letters.'
                     />
                     <FeatureCard
                         icon={<Zap className='w-6 h-6 text-yellow-400' />}
                         title='Fast-Track Synth'
-                        desc='Immediate 3D model generation from 2D inputs.'
+                        desc='Immediate 3D model generation from user inputs.'
                     />
                     <FeatureCard
                         icon={<Globe className='w-6 h-6 text-blue-400' />}
                         title='Global Logistics'
-                        desc='Integrated directly with the Sleigh Delivery Network.'
+                        desc='Integrated directly with the Santas network.'
                     />
                 </div>
 
