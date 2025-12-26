@@ -5,7 +5,6 @@ import {
     Zap,
     Globe,
     Gift,
-    ShieldCheck,
     Cpu,
     Volume2,
     VolumeX,
@@ -20,6 +19,7 @@ import HolographicToyBuilder from "../../components/HolographicToyBuilder";
 import { useAuth } from "../../contexts/AuthContext";
 
 import LoadingScreen from "../../components/LoadingScreen";
+import SantaScrollScene from "../../components/SantaScrollScene";
 
 const UserHome = () => {
     const navigate = useNavigate();
@@ -330,161 +330,9 @@ const UserHome = () => {
                     </div>
                 </section>
 
-                {/* Section 3: Live Logistics Data */}
-                <section className='mb-32 grid lg:grid-cols-2 gap-12 items-center'>
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}>
-                        <span className='text-red-500 font-mono text-sm tracking-widest uppercase'>
-                            Real-time Metrics
-                        </span>
-                        <h2 className='text-3xl md:text-5xl font-bold mt-2 mb-6'>
-                            Global Wish Saturation
-                        </h2>
-                        <p className='text-gray-400 text-lg mb-8 leading-relaxed'>
-                            Monitor the aggregate demand across all sectors. Our
-                            sentimental analysis engine predicts joy levels with
-                            99.9% accuracy, ensuring no chimney is left
-                            unvisited.
-                        </p>
-
-                        <div className='space-y-6'>
-                            {[
-                                {
-                                    label: "North America",
-                                    val: 92,
-                                    color: "bg-cyber-neon",
-                                },
-                                {
-                                    label: "Europe",
-                                    val: 87,
-                                    color: "bg-blue-500",
-                                },
-                                {
-                                    label: "Asia Pacific",
-                                    val: 95,
-                                    color: "bg-purple-500",
-                                },
-                            ].map((stat, i) => (
-                                <div key={i}>
-                                    <div className='flex justify-between text-sm font-mono mb-2 text-gray-300'>
-                                        <span>{stat.label}</span>
-                                        <span>{stat.val}%</span>
-                                    </div>
-                                    <div className='h-2 bg-white/10 rounded-full overflow-hidden'>
-                                        <motion.div
-                                            initial={{ width: 0 }}
-                                            whileInView={{
-                                                width: `${stat.val}%`,
-                                            }}
-                                            transition={{
-                                                duration: 1.5,
-                                                ease: "easeOut",
-                                            }}
-                                            className={`h-full ${stat.color} shadow-[0_0_10px_currentColor]`}
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    <div className='relative h-100 bg-black/40 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center overflow-hidden'>
-                        <div className='absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-blue-900 via-gray-900 to-black' />
-                        {/* Fake Globe Visualization */}
-                        <div className='w-64 h-64 rounded-full border border-white/20 relative animate-[spin_20s_linear_infinite]'>
-                            <div className='absolute top-1/2 left-0 right-0 h-px bg-white/10' />
-                            <div className='absolute top-0 bottom-0 left-1/2 w-px bg-white/10' />
-                            <div className='absolute inset-4 rounded-full border border-dashed border-white/10' />
-                            {/* Orbiting dots */}
-                            <motion.div
-                                className='absolute top-0 left-1/2 w-2 h-2 bg-red-500 rounded-full shadow-[0_0_10px_red]'
-                                animate={{ rotate: 360 }}
-                                style={{ originY: 128 }}
-                                transition={{
-                                    duration: 4,
-                                    repeat: Infinity,
-                                    ease: "linear",
-                                }}
-                            />
-                            <motion.div
-                                className='absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-cyber-neon rounded-full shadow-[0_0_10px_cyan]'
-                                animate={{ rotate: -360 }}
-                                style={{ originX: 50, originY: 50 }}
-                                transition={{
-                                    duration: 6,
-                                    repeat: Infinity,
-                                    ease: "linear",
-                                }}
-                            />
-                        </div>
-                        <div className='absolute bottom-6 left-6 right-6 flex justify-between font-mono text-xs text-gray-500'>
-                            <span>SATELLITE LINK: ACTIVE</span>
-                            <span>UPTIME: 8760h</span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Section 4: Security & Privacy */}
-                <section className='mb-24 bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden'>
-                    <div className='absolute top-0 right-0 w-64 h-64 bg-green-500/10 blur-[100px] rounded-full pointer-events-none' />
-                    <div className='grid md:grid-cols-2 gap-12 items-center relative z-10'>
-                        <div>
-                            <div className='w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mb-6 text-green-400'>
-                                <ShieldCheck className='w-8 h-8' />
-                            </div>
-                            <h2 className='text-3xl font-bold mb-4'>
-                                Elf-Grade Encryption
-                            </h2>
-                            <p className='text-gray-400 leading-relaxed mb-6'>
-                                All wish list data is transmitted via
-                                quantum-encrypted leylines. Only authorized
-                                elves with Level 5 Security Clearance can access
-                                raw wish data. Your child's dreams are safe with
-                                us.
-                            </p>
-                            <ul className='space-y-3 font-mono text-sm text-gray-300'>
-                                <li className='flex items-center gap-3'>
-                                    <div className='w-1.5 h-1.5 bg-green-500 rounded-full' />
-                                    End-to-End Encryption (E2EE)
-                                </li>
-                                <li className='flex items-center gap-3'>
-                                    <div className='w-1.5 h-1.5 bg-green-500 rounded-full' />
-                                    GDPR (Gift Delivery & Protection Regulation)
-                                    Compliant
-                                </li>
-                                <li className='flex items-center gap-3'>
-                                    <div className='w-1.5 h-1.5 bg-green-500 rounded-full' />
-                                    24/7 Snowy Owl Surveillance
-                                </li>
-                            </ul>
-                        </div>
-                        <div className='bg-black/50 border border-white/10 rounded-xl p-6 font-mono text-xs text-green-400/80 h-full min-h-50 flex flex-col'>
-                            <div className='flex border-b border-white/10 pb-2 mb-4 justify-between'>
-                                <span>TERMINAL_OUTPUT</span>
-                                <span>_</span>
-                            </div>
-                            <div className='space-y-2 overflow-hidden'>
-                                <p>{">"} Initiating protocol 7...</p>
-                                <p>{">"} Verifying festive spirit levels...</p>
-                                <p className='text-white'>
-                                    {">"} ACCESS GRANTED
-                                </p>
-                                <p>{">"} Encrypting payload...</p>
-                                <p>{">"} Package signed: SANTA_PRIVATE_KEY</p>
-                                <p>{">"}... Done.</p>
-                                <motion.div
-                                    animate={{ opacity: [0, 1] }}
-                                    transition={{
-                                        repeat: Infinity,
-                                        duration: 0.8,
-                                    }}
-                                    className='w-2 h-4 bg-green-400 mt-2'
-                                />
-                            </div>
-                        </div>
-                    </div>
+                {/* section 3: Interactive 3D Scene */}
+                <section className="relative z-10 mb-24">
+                    <SantaScrollScene />
                 </section>
 
                 <footer className='border-t border-white/10 pt-12 pb-6 text-center text-gray-500 text-sm'>
