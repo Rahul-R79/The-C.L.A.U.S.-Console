@@ -18,7 +18,7 @@ const Santa = () => {
         group.current.position.y = Math.sin(state.clock.elapsedTime * 2) * 0.5 + Math.cos(offset * Math.PI * 4) * 1;
 
         group.current.rotation.z = Math.cos(offset * Math.PI * 2) * -0.2;
-        group.current.rotation.x = 0.1; 
+        group.current.rotation.x = 0.1;
     });
 
     return (
@@ -61,7 +61,7 @@ const SantaScrollScene = () => {
             `}</style>
             <Canvas camera={{ position: [0, 2, 5], fov: 75 }}>
                 <Suspense fallback={null}>
-                    <ScrollControls pages={3} damping={0.2}>
+                    <ScrollControls pages={5} damping={0.2}>
                         {/* 
                            ScrollControls creates a HTML scroll container in front of the canvas.
                            The content inside <Scroll> will move with the scroll bar.
@@ -83,10 +83,30 @@ const SantaScrollScene = () => {
 
                             <div className="w-full h-screen flex items-center justify-end p-20 pointer-events-none">
                                 <div className="max-w-md text-right">
-                                    <h2 className="text-3xl font-bold text-cyber-neon mb-4">Global Logistics</h2>
+                                    <h2 className="text-3xl font-bold text-cyber-neon mb-4">Neural Scan</h2>
                                     <p className="text-lg text-gray-200 bg-black/50 p-6 rounded-xl backdrop-blur-md border border-white/10">
-                                        Monitoring 92% wish saturation in North America.
-                                        Routes calculated. Sleigh systems nominal.
+                                        Advanced OCR technology instantly digitizes handwritten letters.
+                                        Capturing wishes with quantum precision.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="w-full h-screen flex items-center justify-start p-20 pointer-events-none">
+                                <div className="max-w-md text-left">
+                                    <h2 className="text-3xl font-bold text-yellow-400 mb-4">Fast-Track Synth</h2>
+                                    <p className="text-lg text-gray-200 bg-black/50 p-6 rounded-xl backdrop-blur-md border border-white/10">
+                                        Immediate 3D model generation from semantic analysis.
+                                        From imagination to blueprint in milliseconds.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="w-full h-screen flex items-center justify-end p-20 pointer-events-none">
+                                <div className="max-w-md text-right">
+                                    <h2 className="text-3xl font-bold text-cyber-neon mb-4">AR Experience</h2>
+                                    <p className="text-lg text-gray-200 bg-black/50 p-6 rounded-xl backdrop-blur-md border border-white/10">
+                                        Visualize your approved wishes in your real-world space.
+                                        Holographic visualization initialized.
                                     </p>
                                 </div>
                             </div>

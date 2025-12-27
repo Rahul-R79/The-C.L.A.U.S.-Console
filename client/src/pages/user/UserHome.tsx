@@ -3,7 +3,7 @@ import {
     ArrowRight,
     Scan,
     Zap,
-    Globe,
+    Box,
     Gift,
     Cpu,
     Volume2,
@@ -48,7 +48,7 @@ const UserHome = () => {
                 } else {
                     audioRef.current?.pause();
                 }
-            } catch (err) {}
+            } catch (err) { }
         };
 
         playAudio();
@@ -56,7 +56,7 @@ const UserHome = () => {
 
     const handleInteraction = () => {
         if (audioRef.current && audioRef.current.paused && !isMuted) {
-            audioRef.current.play().catch(() => {});
+            audioRef.current.play().catch(() => { });
         }
     };
 
@@ -84,8 +84,7 @@ const UserHome = () => {
             } catch (error: any) {
                 console.error("Login failed", error);
                 alert(
-                    `Login Failed: ${
-                        error.message || "Unknown error"
+                    `Login Failed: ${error.message || "Unknown error"
                     }. Check console for details.`
                 );
             } finally {
@@ -275,9 +274,9 @@ const UserHome = () => {
                         desc='Immediate 3D model generation from user inputs.'
                     />
                     <FeatureCard
-                        icon={<Globe className='w-6 h-6 text-blue-400' />}
-                        title='Global Logistics'
-                        desc='Integrated directly with the Santas network.'
+                        icon={<Box className='w-6 h-6 text-blue-400' />}
+                        title='AR Experience'
+                        desc='Visualize your approved wishes in your real-world space.'
                     />
                 </div>
 
@@ -366,12 +365,13 @@ const UserHome = () => {
                         <a
                             href='#'
                             className='hover:text-cyber-neon transition-colors'>
-                            CONTACT MRS. CLAUS
+                            CONTACT SANTA
                         </a>
                     </div>
                     <p>
-                        © 2024 The C.L.A.U.S. Console. All rights reserved.
-                        Powered by Christmas Spirit.
+                        © 2025 The C.L.A.U.S. Console. All rights reserved.
+                        Powered by Christmas Spirit. <br></br>
+                        Developed by <a href="https://www.linkedin.com/in/rahulqwe/" className="text-cyber-neon">Rahul</a>
                     </p>
                 </footer>
             </div>
