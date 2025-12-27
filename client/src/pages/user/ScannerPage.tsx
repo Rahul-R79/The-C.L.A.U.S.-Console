@@ -7,7 +7,11 @@ import {
     ScanLine,
     CheckCircle,
     ArrowLeft,
-    List
+    List,
+    FileText,
+    Download,
+    Info,
+    Sparkles,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -26,6 +30,7 @@ const ScannerPage = () => {
     const [scanResult, setScanResult] = useState<any>(null);
     const [isCameraActive, setIsCameraActive] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string>("");
+    const [showTemplateModal, setShowTemplateModal] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -162,7 +167,9 @@ const ScannerPage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 onClick={() => navigate("/")}
                 className='absolute top-6 left-6 z-20 flex items-center gap-2 text-cyber-neon/70 hover:text-cyber-neon transition-colors font-mono text-xs tracking-widest uppercase mb-8'>
-                <ArrowLeft size={16} /> <span className="hidden md:inline">Return to Console</span><span className="md:hidden">Back</span>
+                <ArrowLeft size={16} />{" "}
+                <span className='hidden md:inline'>Return to Console</span>
+                <span className='md:hidden'>Back</span>
             </motion.button>
 
             {/* Forward Navigation */}
@@ -171,7 +178,8 @@ const ScannerPage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 onClick={() => navigate("/wishes")}
                 className='absolute top-6 right-6 z-20 flex items-center gap-2 text-cyber-neon/70 hover:text-cyber-neon transition-colors font-mono text-xs tracking-widest uppercase mb-8'>
-                <span className="hidden md:inline">View Manifest</span><span className="md:hidden">Manifest</span> <List size={16} />
+                <span className='hidden md:inline'>View Manifest</span>
+                <span className='md:hidden'>Manifest</span> <List size={16} />
             </motion.button>
 
             <div className='max-w-4xl mx-auto pt-16 relative z-10'>
@@ -190,21 +198,32 @@ const ScannerPage = () => {
                         Upload a photo of the handwritten wish list. Our AI will
                         extract the data and verify "Nice List" eligibility.
                     </p>
+
+                    <motion.button
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        onClick={() => setShowTemplateModal(true)}
+                        className='mt-6 flex items-center gap-2 mx-auto px-5 py-2 rounded-full border border-cyber-neon/20 bg-cyber-neon/5 hover:bg-cyber-neon/10 text-cyber-neon/80 hover:text-cyber-neon transition-all text-sm font-mono tracking-wide'>
+                        <Info size={16} /> VIEW LETTER TEMPLATE
+                    </motion.button>
                 </div>
 
-                <div className='grid lg:grid-cols-5 gap-8'>
+                <div className='grid lg:grid-cols-5 gap-6 lg:gap-8'>
                     {/* Scanner Area */}
                     <div className='lg:col-span-3'>
                         <div
-                            className={`relative min-h-100 border-2 border-dashed rounded-2xl transition-all duration-300 flex flex-col items-center justify-center p-8
-                            ${dragActive
+                            className={`relative min-h-75 md:min-h-100 border-2 border-dashed rounded-2xl transition-all duration-300 flex flex-col items-center justify-center p-6 md:p-8
+                            ${
+                                dragActive
                                     ? "border-cyber-neon bg-cyber-neon/5 scale-[1.02]"
                                     : "border-white/10 bg-white/5 hover:border-white/20"
-                                }
-                            ${previewUrl
+                            }
+                            ${
+                                previewUrl
                                     ? "border-solid border-cyber-neon/20 bg-black/40"
                                     : ""
-                                }
+                            }
                             `}
                             onDragEnter={handleDrag}
                             onDragLeave={handleDrag}
@@ -227,17 +246,17 @@ const ScannerPage = () => {
                                         <p className='text-gray-400 text-sm mb-6'>
                                             Drag & drop or click to browse
                                         </p>
-                                        <div className='flex gap-4 justify-center'>
+                                        <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full sm:w-auto'>
                                             <button
                                                 onClick={() =>
                                                     inputRef.current?.click()
                                                 }
-                                                className='px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded text-sm font-mono tracking-wider transition-colors'>
+                                                className='px-6 py-3 sm:py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded text-sm font-mono tracking-wider transition-colors w-full sm:w-auto'>
                                                 BROWSE FILES
                                             </button>
                                             <button
                                                 onClick={startCamera}
-                                                className='px-6 py-2 bg-cyber-neon/10 hover:bg-cyber-neon/20 border border-cyber-neon/30 text-cyber-neon rounded text-sm font-mono tracking-wider transition-colors flex items-center gap-2'>
+                                                className='px-6 py-3 sm:py-2 bg-cyber-neon/10 hover:bg-cyber-neon/20 border border-cyber-neon/30 text-cyber-neon rounded text-sm font-mono tracking-wider transition-colors flex items-center justify-center gap-2 w-full sm:w-auto'>
                                                 <Camera size={16} /> CAMERA
                                             </button>
                                         </div>
@@ -260,15 +279,15 @@ const ScannerPage = () => {
                                             className='hidden'
                                         />
 
-                                        <div className='flex gap-4'>
+                                        <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto'>
                                             <button
                                                 onClick={capturePhoto}
-                                                className='px-6 py-2 bg-cyber-neon text-black font-bold rounded hover:bg-white transition-colors flex items-center gap-2'>
+                                                className='px-6 py-3 sm:py-2 bg-cyber-neon text-black font-bold rounded hover:bg-white transition-colors flex items-center justify-center gap-2 w-full sm:w-auto'>
                                                 <Camera size={18} /> CAPTURE
                                             </button>
                                             <button
                                                 onClick={stopCamera}
-                                                className='px-6 py-2 bg-red-500/20 text-red-500 border border-red-500/50 rounded hover:bg-red-500/30 transition-colors'>
+                                                className='px-6 py-3 sm:py-2 bg-red-500/20 text-red-500 border border-red-500/50 rounded hover:bg-red-500/30 transition-colors w-full sm:w-auto'>
                                                 CANCEL
                                             </button>
                                         </div>
@@ -351,10 +370,10 @@ const ScannerPage = () => {
                                     <span className='font-mono text-white/80'>
                                         {selectedFile
                                             ? `${(
-                                                selectedFile.size /
-                                                1024 /
-                                                1024
-                                            ).toFixed(2)} MB`
+                                                  selectedFile.size /
+                                                  1024 /
+                                                  1024
+                                              ).toFixed(2)} MB`
                                             : "--"}
                                     </span>
                                 </div>
@@ -381,10 +400,11 @@ const ScannerPage = () => {
                                     disabled={isScanning}
                                     className={`w-full mt-8 py-4 font-bold tracking-wider flex items-center justify-center gap-2 rounded-sm transition-all
                                     text-black
-                                    ${isScanning
+                                    ${
+                                        isScanning
                                             ? "bg-gray-600 cursor-not-allowed"
                                             : "bg-cyber-neon shadow-[0_0_20px_rgba(0,255,255,0.4)] hover:shadow-[0_0_30px_rgba(0,255,255,0.6)]"
-                                        }
+                                    }
                                     `}>
                                     {isScanning ? (
                                         <>PROCESSING...</>
@@ -422,6 +442,124 @@ const ScannerPage = () => {
                         </div>
                     </div>
                 </div>
+                {/* Template Modal */}
+                <AnimatePresence>
+                    {showTemplateModal && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm mt-12'
+                            onClick={() => setShowTemplateModal(false)}>
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                className='bg-cyber-dark/95 border border-cyber-neon/30 rounded-2xl p-4 md:p-6 lg:p-8 max-w-5xl w-full max-h-[85vh] md:max-h-[90vh] overflow-y-auto relative shadow-[0_0_50px_rgba(0,255,255,0.1)]'
+                                onClick={(e) => e.stopPropagation()}>
+                                <button
+                                    onClick={() => setShowTemplateModal(false)}
+                                    className='absolute top-3 right-3 md:top-4 md:right-4 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-all bg-black/20 md:bg-transparent'>
+                                    <X size={20} className='md:w-6 md:h-6' />
+                                </button>
+
+                                <h2 className='text-2xl font-bold mb-2 flex items-center gap-3 text-white'>
+                                    <FileText
+                                        className='text-cyber-neon'
+                                        size={28}
+                                    />
+                                    Standard Letter Protocol
+                                </h2>
+                                <p className='text-gray-400 mb-8 border-b border-white/10 pb-6'>
+                                    Please ensure your handwritten letter
+                                    follows this format for optimal neural
+                                    scanning.
+                                </p>
+
+                                {/* Message from Santa */}
+                                <div className='bg-yellow-500/10 border border-yellow-500/30 p-3 md:p-4 rounded-xl mb-6 md:mb-8 flex items-start gap-3 md:gap-4 relative overflow-hidden'>
+                                    <div className='absolute top-0 right-0 p-8 bg-yellow-500/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2' />
+                                    <div className='p-1.5 md:p-2 bg-yellow-500/20 rounded-full text-yellow-500 shrink-0 relative z-10'>
+                                        <Sparkles className='w-4 h-4 md:w-5 md:h-5' />
+                                    </div>
+                                    <div className='relative z-10'>
+                                        <h4 className='text-yellow-500 font-bold mb-1 font-mono tracking-wide flex flex-wrap items-center gap-2 text-xs md:text-sm'>
+                                            INCOMING_TRANSMISSION: SANTA_CLAUS
+                                        </h4>
+                                        <p className='text-xs md:text-sm text-yellow-100/80 italic font-serif leading-relaxed'>
+                                            "Ho Ho Ho! I absolutely cherish
+                                            handwritten letters! While digital
+                                            lists are efficient, seeing your
+                                            unique handwriting adds a special
+                                            kind of magic that my elves and I
+                                            love the most. It's the most
+                                            personal gift you can send me!"
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className='grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12'>
+                                    {/* Template Section */}
+                                    <div className='space-y-4'>
+                                        <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/5 p-3 rounded-lg border border-white/5'>
+                                            <h3 className='text-base sm:text-lg font-mono text-white/90 font-bold'>
+                                                1. BLANK TEMPLATE
+                                            </h3>
+                                            <a
+                                                href='/images/template.jpg'
+                                                download='santa_letter_template.jpg'
+                                                className='flex items-center justify-center gap-2 px-4 py-2 bg-cyber-neon text-black rounded text-xs font-bold tracking-wider hover:bg-white transition-colors shadow-lg shadow-cyber-neon/20 w-full sm:w-auto'>
+                                                <Download size={14} /> DOWNLOAD
+                                            </a>
+                                        </div>
+                                        <div className='relative group rounded-xl overflow-hidden border border-white/20 bg-white/5 aspect-3/4'>
+                                            <img
+                                                src='/images/template.jpg'
+                                                alt='Letter Template'
+                                                className='w-full h-full object-contain p-2'
+                                            />
+                                        </div>
+                                        <p className='text-sm text-gray-400 leading-relaxed'>
+                                            <strong className='text-cyber-neon'>
+                                                Action Required:
+                                            </strong>{" "}
+                                            Download and print this official
+                                            template. Use a dark pen for best
+                                            results during the scanning process.
+                                        </p>
+                                    </div>
+
+                                    {/* Dummy Section */}
+                                    <div className='space-y-4'>
+                                        <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/5 p-3 rounded-lg border border-white/5'>
+                                            <h3 className='text-base sm:text-lg font-mono text-white/90 font-bold'>
+                                                2. EXAMPLE REFERENCE
+                                            </h3>
+                                            <span className='flex items-center justify-center px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded text-[10px] font-mono tracking-wider w-full sm:w-auto text-center'>
+                                                COMPLETED_SAMPLE
+                                            </span>
+                                        </div>
+                                        <div className='relative rounded-xl overflow-hidden border border-white/20 bg-white/5 aspect-3/4'>
+                                            <img
+                                                src='/images/dummy.jpg'
+                                                alt='Completed Example'
+                                                className='w-full h-full object-contain p-2'
+                                            />
+                                        </div>
+                                        <p className='text-sm text-gray-400 leading-relaxed'>
+                                            <strong className='text-green-400'>
+                                                Reference:
+                                            </strong>{" "}
+                                            See how a correctly filled letter
+                                            looks. Ensure the handwriting is
+                                            legible and stays within the lines.
+                                        </p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );
