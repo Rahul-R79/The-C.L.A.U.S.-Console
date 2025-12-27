@@ -123,7 +123,7 @@ const SingleWishPage = () => {
                             {showAR && wish.modelUrl ? (
                                 // @ts-ignore
                                 <model-viewer
-                                    src={`/api/v1/scan/model-proxy/${wish._id}`}
+                                    src={`${import.meta.env.VITE_API_BASE_URL || ""}/api/v1/scan/model-proxy/${wish._id}`}
                                     ios-src=''
                                     poster={wish.imageUrl}
                                     alt='A 3D model of the gift'
