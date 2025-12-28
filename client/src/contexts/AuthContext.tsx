@@ -25,6 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log("AuthProvider Effect Running. URL:", window.location.href);
+
         // 1. Check for redirect result independently (doesn't block auth state)
         getRedirectResult(auth)
             .then((result) => {
