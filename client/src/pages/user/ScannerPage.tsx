@@ -113,7 +113,9 @@ const ScannerPage = () => {
         setErrorMsg("");
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: true,
+                video: {
+                    facingMode: "environment"
+                },
             });
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
@@ -214,16 +216,14 @@ const ScannerPage = () => {
                     <div className='lg:col-span-3'>
                         <div
                             className={`relative min-h-75 md:min-h-100 border-2 border-dashed rounded-2xl transition-all duration-300 flex flex-col items-center justify-center p-6 md:p-8
-                            ${
-                                dragActive
+                            ${dragActive
                                     ? "border-cyber-neon bg-cyber-neon/5 scale-[1.02]"
                                     : "border-white/10 bg-white/5 hover:border-white/20"
-                            }
-                            ${
-                                previewUrl
+                                }
+                            ${previewUrl
                                     ? "border-solid border-cyber-neon/20 bg-black/40"
                                     : ""
-                            }
+                                }
                             `}
                             onDragEnter={handleDrag}
                             onDragLeave={handleDrag}
@@ -256,7 +256,7 @@ const ScannerPage = () => {
                                             </button>
                                             <button
                                                 onClick={startCamera}
-                                                className='px-6 py-3 sm:py-2 bg-cyber-neon/10 hover:bg-cyber-neon/20 border border-cyber-neon/30 text-cyber-neon rounded text-sm font-mono tracking-wider transition-colors flex items-center justify-center gap-2 w-full sm:w-auto'>
+                                                className='px-6 py-3 sm:py-2 bg-cyber-neon/10 hover:bg-cyber-neon/20 border border-cyber-neon/30 text-cyber-neon rounded text-sm font-mono tracking-wider transition-colors flex items-center justify-center gap-2 w-full sm:w-auto md:hidden'>
                                                 <Camera size={16} /> CAMERA
                                             </button>
                                         </div>
@@ -370,10 +370,10 @@ const ScannerPage = () => {
                                     <span className='font-mono text-white/80'>
                                         {selectedFile
                                             ? `${(
-                                                  selectedFile.size /
-                                                  1024 /
-                                                  1024
-                                              ).toFixed(2)} MB`
+                                                selectedFile.size /
+                                                1024 /
+                                                1024
+                                            ).toFixed(2)} MB`
                                             : "--"}
                                     </span>
                                 </div>
@@ -400,11 +400,10 @@ const ScannerPage = () => {
                                     disabled={isScanning}
                                     className={`w-full mt-8 py-4 font-bold tracking-wider flex items-center justify-center gap-2 rounded-sm transition-all
                                     text-black
-                                    ${
-                                        isScanning
+                                    ${isScanning
                                             ? "bg-gray-600 cursor-not-allowed"
                                             : "bg-cyber-neon shadow-[0_0_20px_rgba(0,255,255,0.4)] hover:shadow-[0_0_30px_rgba(0,255,255,0.6)]"
-                                    }
+                                        }
                                     `}>
                                     {isScanning ? (
                                         <>PROCESSING...</>
