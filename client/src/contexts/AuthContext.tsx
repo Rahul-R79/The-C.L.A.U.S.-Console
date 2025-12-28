@@ -32,17 +32,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         let mounted = true;
 
-        // The Source of Truth: Listen for Auth Changes
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (mounted) {
-                console.log("Auth State Changed:", user ? "Logged In" : "Logged Out");
                 setCurrentUser(user);
                 setLoading(false);
             }
         });
 
-        // Optional: Check redirect result for logging/debugging
-        getRedirectResult(auth).catch(e => console.log("Redirect check info:", e));
+        getRedirectResult(auth).catch(() => { });
 
         return () => {
             mounted = false;
@@ -52,14 +49,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const loginWithGoogle = async () => {
         try {
-            console.log("Attempting Popup Login...");
             await signInWithPopup(auth, googleProvider);
         } catch (error: any) {
-            console.error("Popup Failed:", error.code);
-
-            console.log("Falling back to Redirect Method...");
             try {
-                // Ensure persistence is Local before redirecting
                 await auth.setPersistence(browserLocalPersistence);
                 await signInWithRedirect(auth, googleProvider);
             } catch (redirectError) {

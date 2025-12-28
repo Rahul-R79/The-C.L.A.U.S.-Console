@@ -14,6 +14,5 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
-// Enforce local persistence globally
 import { setPersistence, browserLocalPersistence } from 'firebase/auth';
 setPersistence(auth, browserLocalPersistence).catch(console.error);
