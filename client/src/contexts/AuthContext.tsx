@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { type User, onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
+import { type User, onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut, browserLocalPersistence } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
 interface AuthContextType {
@@ -20,20 +20,27 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    console.log("AuthProvider Mounted");
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const checkRedirect = async () => {
-            try {
-                await getRedirectResult(auth);
-            } catch (error) {
-                console.error("Redirect Login Error:", error);
-            }
-        };
+        // 1. Check for redirect result independently (doesn't block auth state)
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result) {
+                    console.log("Redirect Login Successful. User:", result.user.email);
+                } else {
+                    console.log("No redirect result (Normal page load).");
+                }
+            })
+            .catch((error) => {
+                console.error("Redirect Result Error:", error);
+            });
 
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            await checkRedirect();
+        // 2. Listen for auth state changes (this is the single source of truth)
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            console.log("Auth State Changed:", user ? `Logged in as ${user.email}` : "Logged Out");
             setCurrentUser(user);
             setLoading(false);
         });
@@ -43,9 +50,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const loginWithGoogle = async () => {
         try {
+            console.log("Setting persistence to LOCAL...");
+            await auth.setPersistence(browserLocalPersistence);
+            console.log("Persistence set. Starting Redirect...");
             await signInWithRedirect(auth, googleProvider);
         } catch (error: any) {
-            console.error("Login Error:", error);
+            console.error("Login Initiation Error:", error);
             throw error;
         }
     };
