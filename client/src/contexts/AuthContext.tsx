@@ -48,7 +48,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             await signInWithPopup(auth, googleProvider);
         } catch (error: any) {
-            if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request' || error.message?.includes("initial state")) {
+            console.error("Popup Login Error:", error);
+            if (
+                error.code === 'auth/popup-closed-by-user' ||
+                error.code === 'auth/cancelled-popup-request' ||
+                error.code === 'auth/internal-error' ||
+                error.message?.includes("initial state")
+            ) {
                 console.warn("Popup failed, falling back to redirect...");
                 await signInWithRedirect(auth, googleProvider);
                 return;
