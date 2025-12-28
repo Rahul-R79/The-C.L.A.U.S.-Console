@@ -333,7 +333,7 @@ const ScanResultPage = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2 }}
                     className='relative w-full aspect-square'>
-                    <HologramViewer modelUrl={modelUrl ? `/api/model-proxy-raw?url=${encodeURIComponent(modelUrl)}` : null} />
+                    <HologramViewer modelUrl={modelUrl ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'}/api/v1/scan/model-proxy-raw?url=${encodeURIComponent(modelUrl)}` : null} />
                 </motion.div>
             </div>
         </div>
