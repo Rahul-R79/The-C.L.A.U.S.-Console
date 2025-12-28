@@ -176,9 +176,7 @@ const ScanResultPage = () => {
 
     const getProxyUrl = (originalUrl: string) => {
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-        // Remove trailing slash if present
-        const cleanBase = baseUrl.replace(/\/$/, '');
-        return `${cleanBase}/api/v1/scan/model-proxy-raw?url=${encodeURIComponent(originalUrl)}`;
+        return `${baseUrl}/api/v1/scan/model-proxy-raw?url=${encodeURIComponent(originalUrl)}`;
     };
 
     return (

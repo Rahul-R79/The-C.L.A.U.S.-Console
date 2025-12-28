@@ -125,18 +125,14 @@ export const proxyModel = async (req: Request, res: Response) => {
         }
 
         const response = await axios.get(wish.modelUrl, {
-            responseType: "stream",
+            responseType: "arraybuffer",
         });
 
         res.setHeader(
             "Content-Type",
             response.headers["content-type"] || "model/gltf-binary"
         );
-        if (response.headers["content-length"]) {
-            res.setHeader("Content-Length", response.headers["content-length"]);
-        }
-
-        response.data.pipe(res);
+        res.send(response.data);
     } catch (error: any) {
         console.error("Proxy error:", error.message);
         res.status(500).send("Error retrieving model stream");
@@ -228,6 +224,7 @@ export const updateWishStatus = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
 export const proxyRawModel = async (req: Request, res: Response) => {
     try {
         const { url } = req.query;
@@ -257,8 +254,6 @@ export const proxyRawModel = async (req: Request, res: Response) => {
             "Content-Type",
             response.headers["content-type"] || "model/gltf-binary"
         );
-        // Do not set Content-Length manually, res.send will handle it correcty for buffers
-
         res.send(response.data);
     } catch (error: any) {
         console.error("Raw Proxy error:", error.message);
