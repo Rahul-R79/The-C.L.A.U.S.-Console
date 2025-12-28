@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return unsubscribe;
         };
 
-        const unsubPromise = initAuth();
+        initAuth();
 
         return () => {
             mounted = false;
