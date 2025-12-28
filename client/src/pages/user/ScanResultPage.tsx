@@ -174,6 +174,18 @@ const ScanResultPage = () => {
         }
     };
 
+    useEffect(() => {
+        console.log("ScanResult Component Loaded - v3.0");
+        console.log("API Base URL:", import.meta.env.VITE_API_BASE_URL);
+    }, []);
+
+    const getProxyUrl = (originalUrl: string) => {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+        // Remove trailing slash if present
+        const cleanBase = baseUrl.replace(/\/$/, '');
+        return `${cleanBase}/api/v1/scan/model-proxy-raw?url=${encodeURIComponent(originalUrl)}`;
+    };
+
     return (
         <div className='min-h-screen bg-cyber-dark text-white relative overflow-hidden font-sans p-4 md:p-8'>
             <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-900/20 via-black to-black opacity-40 pointer-events-none' />
@@ -333,7 +345,7 @@ const ScanResultPage = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2 }}
                     className='relative w-full aspect-square'>
-                    <HologramViewer modelUrl={modelUrl ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'}/api/v1/scan/model-proxy-raw?url=${encodeURIComponent(modelUrl)}` : null} />
+                    <HologramViewer modelUrl={modelUrl ? getProxyUrl(modelUrl) : null} />
                 </motion.div>
             </div>
         </div>
