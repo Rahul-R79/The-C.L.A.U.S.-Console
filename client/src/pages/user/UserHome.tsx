@@ -54,6 +54,17 @@ const UserHome = () => {
         playAudio();
     }, [isMuted]);
 
+    useEffect(() => {
+        if (!hasInteracted) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [hasInteracted]);
+
     const handleInteraction = () => {
         if (audioRef.current && audioRef.current.paused && !isMuted) {
             audioRef.current.play().catch(() => { });
