@@ -1,5 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { type User, onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut, browserLocalPersistence } from 'firebase/auth';
+import {
+    type User,
+    onAuthStateChanged,
+    signInWithRedirect,
+    signInWithPopup,
+    getRedirectResult,
+    signOut,
+    browserLocalPersistence
+} from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
 interface AuthContextType {
@@ -13,52 +21,70 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
+    if (!context) throw new Error('useAuth must be used within an AuthProvider');
     return context;
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    console.log("AuthProvider Mounted");
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log("AuthProvider Effect Running. URL:", window.location.href);
+        let mounted = true;
 
-        // 1. Check for redirect result independently (doesn't block auth state)
-        getRedirectResult(auth)
-            .then((result) => {
+        const initAuth = async () => {
+            console.log("Auth Provider Mounted. URL:", window.location.href);
+
+            // 1. Check for Redirect Result (Mobile Flow)
+            try {
+                // This checks if we just returned from a signInWithRedirect
+                const result = await getRedirectResult(auth);
                 if (result) {
-                    console.log("Redirect Login Successful. User:", result.user.email);
+                    console.log("Redirect Login Detected & Successful:", result.user.email);
+                    // No need to set currentUser manually, onAuthStateChanged will catch it
                 } else {
-                    console.log("No redirect result (Normal page load).");
+                    console.log("No redirect result (Normal load).");
                 }
-            })
-            .catch((error) => {
-                console.error("Redirect Result Error:", error);
+            } catch (error) {
+                console.error("Redirect Check Error:", error);
+            }
+
+            // 2. Listen for Auth State
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+                if (!mounted) return;
+                console.log("Auth State Changed:", user ? "Logged In" : "Logged Out");
+                setCurrentUser(user);
+                setLoading(false);
             });
 
-        // 2. Listen for auth state changes (this is the single source of truth)
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            console.log("Auth State Changed:", user ? `Logged in as ${user.email}` : "Logged Out");
-            setCurrentUser(user);
-            setLoading(false);
-        });
+            return unsubscribe;
+        };
 
-        return unsubscribe;
+        const unsubPromise = initAuth();
+
+        return () => {
+            mounted = false;
+        };
     }, []);
 
     const loginWithGoogle = async () => {
         try {
-            console.log("Setting persistence to LOCAL...");
-            await auth.setPersistence(browserLocalPersistence);
-            console.log("Persistence set. Starting Redirect...");
-            await signInWithRedirect(auth, googleProvider);
+            console.log("Attempting Popup Login...");
+            // Standard Popup Flow (Best for PWA/Desktop)
+            await signInWithPopup(auth, googleProvider);
         } catch (error: any) {
-            console.error("Login Initiation Error:", error);
-            throw error;
+            console.error("Popup Failed:", error.code, error.message);
+
+            // Fallback for Mobile/Blockers/COOP issues
+            console.log("Falling back to Redirect Method...");
+            try {
+                // Force local persistence to survive redirect
+                await auth.setPersistence(browserLocalPersistence);
+                await signInWithRedirect(auth, googleProvider);
+            } catch (redirectError) {
+                console.error("Redirect Failed:", redirectError);
+                throw redirectError;
+            }
         }
     };
 
