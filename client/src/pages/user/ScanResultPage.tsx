@@ -333,7 +333,7 @@ const ScanResultPage = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2 }}
                     className='relative w-full aspect-square'>
-                    <HologramViewer modelUrl={modelUrl} />
+                    <HologramViewer modelUrl={modelUrl ? `/api/model-proxy-raw?url=${encodeURIComponent(modelUrl)}` : null} />
                 </motion.div>
             </div>
         </div>

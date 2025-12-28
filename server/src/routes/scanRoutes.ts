@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyAuthToken } from "../middleware/auth";
-import { processScan, upload, generateToy, checkToyStatus, approveWish, getWishes, getWishById, getSantaWishes, updateWishStatus, proxyModel } from "../controllers/scanController";
+import { processScan, upload, generateToy, checkToyStatus, approveWish, getWishes, getWishById, getSantaWishes, updateWishStatus, proxyModel, proxyRawModel } from "../controllers/scanController";
 
 
 const router = Router();
@@ -12,6 +12,7 @@ router.post("/approve", verifyAuthToken, approveWish);
 router.get("/wishes", verifyAuthToken, getWishes);
 router.get("/wishes/:id", verifyAuthToken, getWishById);
 router.get("/model-proxy/:id", proxyModel);
+router.get("/model-proxy-raw", proxyRawModel);
 
 
 router.get("/santa/wishes", getSantaWishes);

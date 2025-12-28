@@ -228,3 +228,42 @@ export const updateWishStatus = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+export const proxyRawModel = async (req: Request, res: Response) => {
+    try {
+        const { url } = req.query;
+
+        if (!url || typeof url !== 'string') {
+            return res.status(400).send("No URL provided");
+        }
+
+        const allowedDomains = ['tripo3d.com', 'tripo-data.rg1.data.tripo3d.com'];
+        if (url.includes('localhost') || url.includes('127.0.0.1')) {
+            return res.status(403).send("Localhost access denied");
+        }
+
+        try {
+            const parsedUrl = new URL(url);
+            const isAllowed = allowedDomains.some(d => parsedUrl.hostname === d || parsedUrl.hostname.endsWith('.' + d));
+            if (!isAllowed) return res.status(403).send("Domain not allowed");
+        } catch (e) {
+            return res.status(400).send("Invalid URL");
+        }
+
+        const response = await axios.get(url, {
+            responseType: "stream",
+        });
+
+        res.setHeader(
+            "Content-Type",
+            response.headers["content-type"] || "model/gltf-binary"
+        );
+        if (response.headers["content-length"]) {
+            res.setHeader("Content-Length", response.headers["content-length"]);
+        }
+
+        response.data.pipe(res);
+    } catch (error: any) {
+        console.error("Raw Proxy error:", error.message);
+        res.status(500).send("Error proxying model");
+    }
+};
