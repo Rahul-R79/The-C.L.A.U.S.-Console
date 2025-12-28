@@ -38,28 +38,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const loginWithGoogle = async () => {
         try {
-            // Check for mobile device
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
             if (isMobile) {
+                console.log("Mobile device detected, using Redirect login.");
                 await signInWithRedirect(auth, googleProvider);
                 return;
             }
 
+            console.log("Desktop detected, attempting Popup login.");
             await signInWithPopup(auth, googleProvider);
         } catch (error: any) {
-            console.error("Popup Login Error:", error);
-            if (
-                error.code === 'auth/popup-closed-by-user' ||
-                error.code === 'auth/cancelled-popup-request' ||
-                error.code === 'auth/internal-error' ||
-                error.message?.includes("initial state")
-            ) {
-                console.warn("Popup failed, falling back to redirect...");
+            console.error("Popup Login Failed:", error);
+            console.warn("Falling back to redirect method...");
+            try {
                 await signInWithRedirect(auth, googleProvider);
-                return;
+            } catch (redirectError) {
+                console.error("Redirect Fallback Failed:", redirectError);
+                throw redirectError;
             }
-            throw error;
         }
     };
 
