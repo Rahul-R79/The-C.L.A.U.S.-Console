@@ -58,6 +58,13 @@ const SantaScrollScene = () => {
                     -ms-overflow-style: none;
                     scrollbar-width: none;
                 }
+                @keyframes scroll-pulse {
+                    0%, 100% { opacity: 0.6; transform: translate(-50%, 0) scale(0.95); }
+                    50% { opacity: 1; transform: translate(-50%, 0) scale(1.05); }
+                }
+                .animate-scroll-pulse {
+                    animation: scroll-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                }
             `}</style>
             <Canvas camera={{ position: [0, 2, 5], fov: 75 }}>
                 <Suspense fallback={null}>
@@ -75,10 +82,16 @@ const SantaScrollScene = () => {
                         */}
 
                         <Scroll html style={{ width: '100%' }}>
-                            <div className="w-full h-screen flex items-center justify-center p-10 pointer-events-none">
+                            <div className="w-full h-screen flex flex-col items-center justify-center p-10 pointer-events-none relative">
                                 <h1 className="text-4xl md:text-6xl font-black text-white text-center drop-shadow-[0_0_15px_rgba(0,255,255,0.8)]">
                                     SANTA'S JOURNEY
                                 </h1>
+                                <div className="absolute bottom-10 left-1/2 flex flex-col items-center gap-2 animate-scroll-pulse">
+                                    <span className="text-cyber-neon text-[10px] md:text-xs tracking-[0.2em] font-mono uppercase bg-black/60 px-3 py-1 rounded-full border border-cyber-neon/30 backdrop-blur-sm">
+                                        Scroll to Explore
+                                    </span>
+                                    <div className="w-px h-8 bg-gradient-to-b from-cyber-neon to-transparent" />
+                                </div>
                             </div>
 
                             <div className="w-full h-screen flex items-center justify-end p-20 pointer-events-none">
