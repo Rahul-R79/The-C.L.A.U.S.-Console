@@ -24,14 +24,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getRedirectResult(auth).catch((error) => {
-            console.error("Redirect Login Error:", error);
-        });
+        const checkRedirect = async () => {
+            try {
+                await getRedirectResult(auth);
+            } catch (error) {
+                console.error("Redirect Login Error:", error);
+            }
+        };
 
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            await checkRedirect();
             setCurrentUser(user);
             setLoading(false);
         });
+
         return unsubscribe;
     }, []);
 
