@@ -1,20 +1,12 @@
 <div align="center">
 
-  <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=900&size=40&duration=3000&pause=1000&color=D32F2F&center=true&vCenter=true&width=700&lines=🎅+The+C.L.A.U.S.+Console+🎄" alt="The C.L.A.U.S. Console" />
-  </a>
+  <img src="https://readme-typing-svg.demolab.com?font=Rubik+Iso&weight=900&size=60&duration=3000&pause=1000&color=D32F2F&center=true&vCenter=true&width=800&lines=The+C.L.A.U.S.+Console" alt="The C.L.A.U.S. Console" />
 
   <br/>
   
   <img src="https://media.giphy.com/media/3ofT5EtPNBpIjC8jTy/giphy.gif" width="100%" alt="Santa Animation"/>
 
   <br/>
-
-  <p>
-    <img src="https://img.shields.io/badge/Santa-Real-2ea44f?style=for-the-badge&logo=github" alt="Santa Real"/>
-    <img src="https://img.shields.io/badge/Spirit-100%25-red?style=for-the-badge" alt="Christmas Spirit"/>
-    <img src="https://img.shields.io/badge/Naughty_List-Empty-green?style=for-the-badge" alt="Naughty List"/>
-  </p>
 
   <p>
     <a href="https://claus-console.vercel.app/">
@@ -112,7 +104,7 @@ See the C.L.A.U.S. Console in action!
 
 |                                 **Full Website Walkthrough**                                  |                                 **Mobile AR & Letter Scanning**                                 |
 | :-------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: |
-| [![Website Demo](https://img.youtube.com/vi/ZiDnEWMMCN4/0.jpg)](https://youtu.be/ZiDnEWMMCN4) | [![Mobile AR Demo](https://img.youtube.com/vi/ZiDnEWMMCN4/0.jpg)](https://youtu.be/ZiDnEWMMCN4) |
+| [![Website Demo](https://img.youtube.com/vi/ZiDnEWMMCN4/0.jpg)](https://youtu.be/ZiDnEWMMCN4) | [![Mobile AR Demo](https://img.youtube.com/vi/X_Zb40xF_xw/0.jpg)](https://youtu.be/X_Zb40xF_xw) |
 |                               _Desktop Dashboard & SantaComms_                                |                                 _Real-time AR & Camera Capture_                                 |
 
 ## 📸 Functionality Showcase
@@ -238,10 +230,10 @@ The client usually runs on `http://localhost:5173` and the server on `http://loc
 
 ## 📜 License
 
-Distributed under the ISC License. See `LICENSE` for more information.
+Distributed under the ISC License. See [LICENSE](./LICENSE) for more information.
 
 <div align="center">
   <br/>
   <img src="https://capsule-render.vercel.app/api?type=waving&color=d32f2f&height=100&section=footer" width="100%"/>
-  <p>Made with ❤️ and 🍪 at the North Pole</p>
+  <p>Hand crafted with ❤️ by <a href="https://github.com/Rahul-R79">@Rahul-R79</a></p>
 </div>
