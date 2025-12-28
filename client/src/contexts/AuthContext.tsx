@@ -32,53 +32,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         let mounted = true;
 
-        const initAuth = async () => {
-            console.log("Auth Provider Mounted. URL:", window.location.href);
-
-            // 1. Check for Redirect Result (Mobile Flow)
-            try {
-                // This checks if we just returned from a signInWithRedirect
-                const result = await getRedirectResult(auth);
-                if (result) {
-                    console.log("Redirect Login Detected & Successful:", result.user.email);
-                    // No need to set currentUser manually, onAuthStateChanged will catch it
-                } else {
-                    console.log("No redirect result (Normal load).");
-                }
-            } catch (error) {
-                console.error("Redirect Check Error:", error);
-            }
-
-            // 2. Listen for Auth State
-            const unsubscribe = onAuthStateChanged(auth, (user) => {
-                if (!mounted) return;
+        // The Source of Truth: Listen for Auth Changes
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (mounted) {
                 console.log("Auth State Changed:", user ? "Logged In" : "Logged Out");
                 setCurrentUser(user);
                 setLoading(false);
-            });
+            }
+        });
 
-            return unsubscribe;
-        };
-
-        initAuth();
+        // Optional: Check redirect result for logging/debugging
+        getRedirectResult(auth).catch(e => console.log("Redirect check info:", e));
 
         return () => {
             mounted = false;
+            unsubscribe();
         };
     }, []);
 
     const loginWithGoogle = async () => {
         try {
             console.log("Attempting Popup Login...");
-            // Standard Popup Flow (Best for PWA/Desktop)
             await signInWithPopup(auth, googleProvider);
         } catch (error: any) {
-            console.error("Popup Failed:", error.code, error.message);
+            console.error("Popup Failed:", error.code);
 
-            // Fallback for Mobile/Blockers/COOP issues
             console.log("Falling back to Redirect Method...");
             try {
-                // Force local persistence to survive redirect
+                // Ensure persistence is Local before redirecting
                 await auth.setPersistence(browserLocalPersistence);
                 await signInWithRedirect(auth, googleProvider);
             } catch (redirectError) {
