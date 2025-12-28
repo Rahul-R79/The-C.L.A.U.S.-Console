@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { type User, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { type User, onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
 interface AuthContextType {
@@ -24,6 +24,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Handle redirect result (for mobile flow)
+        getRedirectResult(auth).catch((error) => {
+            console.error("Redirect Login Error:", error);
+        });
+
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
             setLoading(false);
@@ -33,9 +38,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const loginWithGoogle = async () => {
         try {
+            // Check for mobile device
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                await signInWithRedirect(auth, googleProvider);
+                return;
+            }
+
             await signInWithPopup(auth, googleProvider);
-        } catch (error) {
-            console.error("Login Failed", error);
+        } catch (error: any) {
+            if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request' || error.message?.includes("initial state")) {
+                console.warn("Popup failed, falling back to redirect...");
+                await signInWithRedirect(auth, googleProvider);
+                return;
+            }
             throw error;
         }
     };
