@@ -1,9 +1,12 @@
 <div align="center">
 
+<br/>
+
   <img src="https://readme-typing-svg.demolab.com?font=Rubik+Iso&weight=900&size=60&duration=3000&pause=1000&color=D32F2F&center=true&vCenter=true&width=800&lines=The+C.L.A.U.S.+Console" alt="The C.L.A.U.S. Console" />
 
   <br/>
-  
+  <br/>
+
   <img src="https://media.giphy.com/media/3ofT5EtPNBpIjC8jTy/giphy.gif" width="100%" alt="Santa Animation"/>
 
   <br/>
@@ -17,6 +20,10 @@
   <p>
     <code>Authentication</code> • <code>Handwritten Letter Recognition</code> • <code>3D Generation</code> • <code>Augmented Reality</code> • <code>Real-Time Chat</code>
   </p>
+
+  <br/>
+
+> **⚠️ Performance Note**: This application uses high-fidelity **WebGL & Three.js 3D animations**, so for the best visual experience, we recommend exploring the **Landing Page on a Laptop/Desktop** and using **minimum spec mobile devices** for the **AR Gift Preview & Camera/Scanning features**.
 
 </div>
 
@@ -87,7 +94,8 @@ The official registry of granted requests.
 **File:** `client/src/pages/user/SingleWishPage.tsx`
 Bringing the gift home (virtually) before Christmas.
 
--   **Augmented Reality**: Once approved by Santa, users can project the 3D toy into their physical room.
+-   **Elf Gamification**: Waiting for the build? Play a mini-game to boost the elves' energy and speed up production!
+-   **Augmented Reality**: Once built, project the 3D toy into your physical room.
 -   **Verification**: Ensure the gift fits on the shelf (or in the garage) using cutting-edge WebXR.
 
 ### 6. 💬 SantaComms (Real-Time)
@@ -233,7 +241,6 @@ The client usually runs on `http://localhost:5173` and the server on `http://loc
 Distributed under the ISC License. See [LICENSE](./LICENSE) for more information.
 
 <div align="center">
-  <br/>
   <img src="https://capsule-render.vercel.app/api?type=waving&color=d32f2f&height=100&section=footer" width="100%"/>
   <p>Hand crafted with ❤️ by <a href="https://github.com/Rahul-R79">@Rahul-R79</a></p>
 </div>
