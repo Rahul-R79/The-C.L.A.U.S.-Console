@@ -110,6 +110,8 @@ The direct line to the Big Guy.
 
 See the C.L.A.U.S. Console in action!
 
+> **Click the thumbnails below to watch the demos on YouTube.**
+
 |                                 **Full Website Walkthrough**                                  |                                 **Mobile AR & Letter Scanning**                                 |
 | :-------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: |
 | [![Website Demo](https://img.youtube.com/vi/ZiDnEWMMCN4/0.jpg)](https://youtu.be/ZiDnEWMMCN4) | [![Mobile AR Demo](https://img.youtube.com/vi/X_Zb40xF_xw/0.jpg)](https://youtu.be/X_Zb40xF_xw) |
@@ -154,11 +156,11 @@ This project leverages a modern **MERN** stack and **Generative AI** with powerf
   </a>
 </div>
 
-| Domain       | Technologies                                                                                      |
-| :----------- | :------------------------------------------------------------------------------------------------ |
-| **Frontend** | React 19, Vite, TailwindCSS v4, Framer Motion, Three.js (@react-three/fiber), Google Model Viewer |
-| **Backend**  | Node.js, Express, Mongoose (MongoDB), Socket.io                                                   |
-| **Services** | Firebase (Auth), Cloudinary (Media), Google Gemini AI (Intelligence)                              |
+| Domain       | Technologies                                                                                                                  |
+| :----------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend** | React 19, Vite, TailwindCSS v4, Framer Motion, Three.js (@react-three/fiber), Google Model Viewer, React Router, Lucide React |
+| **Backend**  | Node.js, Express, Mongoose (MongoDB), Socket.io                                                                               |
+| **Services** | Firebase (Auth), Cloudinary (Media), Google Gemini AI (Intelligence), Tripo AI (3D Models)                                    |
 
 ## ✨ Key Features
 
