@@ -174,11 +174,6 @@ const ScanResultPage = () => {
         }
     };
 
-    useEffect(() => {
-        console.log("ScanResult Component Loaded - v3.0");
-        console.log("API Base URL:", import.meta.env.VITE_API_BASE_URL);
-    }, []);
-
     const getProxyUrl = (originalUrl: string) => {
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
         // Remove trailing slash if present
