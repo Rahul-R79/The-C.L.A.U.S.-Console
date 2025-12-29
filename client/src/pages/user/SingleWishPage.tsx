@@ -11,6 +11,7 @@ import {
     XCircle,
     Clock,
     Hammer,
+    AlertTriangle,
 } from "lucide-react";
 import Snowfall from "../../components/Snowfall";
 import LiveToyFabricator from "../../components/LiveToyFabricator";
@@ -126,6 +127,7 @@ const SingleWishPage = () => {
                                     src={`${import.meta.env.VITE_API_BASE_URL || ""}/api/v1/scan/model-proxy/${wish._id}`}
                                     ios-src=''
                                     poster={wish.imageUrl}
+                                    onLoad={() => { }}
                                     alt='A 3D model of the gift'
                                     shadow-intensity='1'
                                     camera-controls
@@ -137,6 +139,7 @@ const SingleWishPage = () => {
                                         height: "100%",
                                         backgroundColor: "rgba(0,0,0,0.2)",
                                     }}>
+
                                     <div className='absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono border border-white/20 pointer-events-none text-white'>
                                         Use gestures to rotate
                                     </div>
@@ -148,59 +151,59 @@ const SingleWishPage = () => {
                                     {/* @ts-ignore */}
                                 </model-viewer>
                             ) : // CASE 2: Fabrication In Progress (Active Build)
-                            showFabricator && !fabricationComplete ? (
-                                <div className='w-full h-full p-4'>
-                                    <LiveToyFabricator
-                                        itemName={wish.wish}
-                                        onComplete={() => {
-                                            setFabricationComplete(true);
-                                            localStorage.setItem(
-                                                `fabrication_${id}`,
-                                                "100"
-                                            );
-                                            setShowFabricator(false);
-                                        }}
-                                    />
-                                </div>
-                            ) : // CASE 3: Static Image (Default or Completed Preview)
-                            wish.imageUrl ? (
-                                <div className='relative w-full h-full'>
-                                    <img
-                                        src={wish.imageUrl}
-                                        alt={wish.wish}
-                                        className='w-full h-full object-cover relative z-10'
-                                    />
-                                    {/* Overlay for "Fabrication Complete" */}
-                                    {fabricationComplete && !showAR && (
-                                        <div className='absolute inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-20'>
-                                            <motion.div
-                                                initial={{
-                                                    scale: 0.8,
-                                                    opacity: 0,
-                                                }}
-                                                animate={{
-                                                    scale: 1,
-                                                    opacity: 1,
-                                                }}
-                                                className='text-center'>
-                                                <div className='w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_#22c55e]'>
-                                                    <CheckCircle className='w-10 h-10 text-white' />
+                                showFabricator && !fabricationComplete ? (
+                                    <div className='w-full h-full p-4'>
+                                        <LiveToyFabricator
+                                            itemName={wish.wish}
+                                            onComplete={() => {
+                                                setFabricationComplete(true);
+                                                localStorage.setItem(
+                                                    `fabrication_${id}`,
+                                                    "100"
+                                                );
+                                                setShowFabricator(false);
+                                            }}
+                                        />
+                                    </div>
+                                ) : // CASE 3: Static Image (Default or Completed Preview)
+                                    wish.imageUrl ? (
+                                        <div className='relative w-full h-full'>
+                                            <img
+                                                src={wish.imageUrl}
+                                                alt={wish.wish}
+                                                className='w-full h-full object-cover relative z-10'
+                                            />
+                                            {/* Overlay for "Fabrication Complete" */}
+                                            {fabricationComplete && !showAR && (
+                                                <div className='absolute inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-20'>
+                                                    <motion.div
+                                                        initial={{
+                                                            scale: 0.8,
+                                                            opacity: 0,
+                                                        }}
+                                                        animate={{
+                                                            scale: 1,
+                                                            opacity: 1,
+                                                        }}
+                                                        className='text-center'>
+                                                        <div className='w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_#22c55e]'>
+                                                            <CheckCircle className='w-10 h-10 text-white' />
+                                                        </div>
+                                                        <h3 className='text-2xl font-bold text-white mb-2'>
+                                                            READY FOR DELIVERY
+                                                        </h3>
+                                                        <p className='text-gray-300'>
+                                                            Toy fabrication successful.
+                                                        </p>
+                                                    </motion.div>
                                                 </div>
-                                                <h3 className='text-2xl font-bold text-white mb-2'>
-                                                    READY FOR DELIVERY
-                                                </h3>
-                                                <p className='text-gray-300'>
-                                                    Toy fabrication successful.
-                                                </p>
-                                            </motion.div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className='flex items-center justify-center h-full text-white/20'>
+                                            <Gift className='w-24 h-24' />
                                         </div>
                                     )}
-                                </div>
-                            ) : (
-                                <div className='flex items-center justify-center h-full text-white/20'>
-                                    <Gift className='w-24 h-24' />
-                                </div>
-                            )}
 
                             {/* Status Overlay (Only show if NOT in AR mode and NOT building) */}
                             {!showAR && !showFabricator && (
@@ -208,13 +211,12 @@ const SingleWishPage = () => {
                                     <div className='absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent opacity-60 z-20 pointer-events-none' />
                                     <div className='absolute bottom-6 left-6 z-30'>
                                         <span
-                                            className={`px-3 py-1 rounded text-xs font-mono tracking-widest uppercase border ${
-                                                wish.status === "pending"
-                                                    ? "bg-yellow-500/20 text-yellow-500 border-yellow-500/40"
-                                                    : wish.status === "denied"
+                                            className={`px-3 py-1 rounded text-xs font-mono tracking-widest uppercase border ${wish.status === "pending"
+                                                ? "bg-yellow-500/20 text-yellow-500 border-yellow-500/40"
+                                                : wish.status === "denied"
                                                     ? "bg-red-500/20 text-red-500 border-red-500/40"
                                                     : "bg-cyber-neon/20 text-cyber-neon border-cyber-neon/40"
-                                            }`}>
+                                                }`}>
                                             STATUS: {wish.status}
                                         </span>
                                     </div>
@@ -242,25 +244,75 @@ const SingleWishPage = () => {
                         </div>
 
                         <div className='space-y-6'>
+                            {wish.status === "approved" && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className='relative group overflow-hidden rounded-xl bg-orange-500/5 border border-orange-500/20 p-4 sm:p-5 border-l-4 border-l-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.1)] backdrop-blur-sm'>
+                                    <div className='flex flex-col xs:flex-row items-start gap-3 sm:gap-4'>
+                                        <div className='relative shrink-0'>
+                                            <div className='absolute inset-0 bg-orange-500 blur-md opacity-20 animate-pulse' />
+                                            <div className='relative p-2 bg-orange-500/10 rounded-lg'>
+                                                <AlertTriangle
+                                                    size={20}
+                                                    className='text-orange-500 animate-bounce'
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className='flex-1 w-full'>
+                                            <div className='flex items-center justify-between mb-2'>
+                                                <h4 className='text-orange-500 font-mono text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2'>
+                                                    <span className='w-2 h-2 bg-orange-500 rounded-full animate-ping' />
+                                                    AR Availability Alert
+                                                </h4>
+                                            </div>
+                                            <div className='space-y-3'>
+                                                <p className='text-white/90 text-sm leading-relaxed font-semibold'>
+                                                    Visualize the AR experience
+                                                    through your mobile phone. It
+                                                    will{" "}
+                                                    <span className='text-orange-400 font-bold underline decoration-orange-500/30 underline-offset-4'>
+                                                        expire shortly
+                                                    </span>{" "}
+                                                    due to the Christmas rush.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Visual "Drain" Effect */}
+                                    <div className='absolute bottom-0 left-0 w-full h-1 bg-white/5'>
+                                        <motion.div
+                                            initial={{ width: "100%" }}
+                                            animate={{ width: "5%" }}
+                                            transition={{
+                                                duration: 120,
+                                                ease: "linear",
+                                            }}
+                                            className='h-full bg-orange-500 shadow-[0_0_10px_#f97316]'
+                                        />
+                                    </div>
+                                </motion.div>
+                            )}
                             {/* Sentiment Analysis Card */}
                             <div className='flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors'>
                                 <div
-                                    className={`p-3 rounded-full ${
-                                        wish.sentiment
-                                            .toLowerCase()
-                                            .includes("positive") ||
+                                    className={`p-3 rounded-full ${wish.sentiment
+                                        .toLowerCase()
+                                        .includes("positive") ||
                                         wish.sentiment
                                             .toLowerCase()
                                             .includes("good")
-                                            ? "bg-green-500/20 text-green-400"
-                                            : "bg-red-500/20 text-red-400"
-                                    }`}>
+                                        ? "bg-green-500/20 text-green-400"
+                                        : "bg-red-500/20 text-red-400"
+                                        }`}>
                                     {wish.sentiment
                                         .toLowerCase()
                                         .includes("positive") ||
-                                    wish.sentiment
-                                        .toLowerCase()
-                                        .includes("good") ? (
+                                        wish.sentiment
+                                            .toLowerCase()
+                                            .includes("good") ? (
                                         <CheckCircle size={24} />
                                     ) : (
                                         <XCircle size={24} />

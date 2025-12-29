@@ -34,6 +34,7 @@ const ScanResultPage = () => {
 
     const [isGenerating, setIsGenerating] = useState(false);
     const [isApproving, setIsApproving] = useState(false);
+    const [isModelLoaded, setIsModelLoaded] = useState(false);
     const [modelUrl, setModelUrl] = useState<string | null>(null);
     const [modelThumbnail, setModelThumbnail] = useState<string | null>(null);
     const [statusMessage, setStatusMessage] = useState<string>("");
@@ -87,8 +88,9 @@ const ScanResultPage = () => {
                             task.render?.image_url;
                         if (thumb) setModelThumbnail(thumb);
 
-                        setIsGenerating(false);
-                        setStatusMessage("Generative Process Complete.");
+                        // Keep generating state true until the 3D viewer signals it's ready
+                        setStatusMessage("Finalizing Holographic Link...");
+                    } else {
                         setStatusMessage("Error: Model URL missing.");
                         setIsGenerating(false);
                     }
@@ -104,8 +106,7 @@ const ScanResultPage = () => {
                     alert("Generation Failed.");
                 } else {
                     setStatusMessage(
-                        `Status: ${task.status.toUpperCase()}... (${task.progress
-                        }%)`
+                        `Fabricating... ${task.progress || 0}%`
                     );
                 }
             } catch (error) {
@@ -116,6 +117,7 @@ const ScanResultPage = () => {
     const handleGenerateToy = async () => {
         if (!currentUser) return;
         setIsGenerating(true);
+        setIsModelLoaded(false);
         setStatusMessage("Initiating Quantum Forge...");
         setModelUrl(null);
 
@@ -276,7 +278,7 @@ const ScanResultPage = () => {
                     {/* Action Buttons */}
                     <div className='flex flex-col gap-4'>
                         {/* Conditional Action Buttons */}
-                        {!modelUrl ? (
+                        {(!modelUrl || !isModelLoaded) ? (
                             <button
                                 onClick={handleGenerateToy}
                                 disabled={isGenerating}
@@ -288,7 +290,10 @@ const ScanResultPage = () => {
                                     }
                                 `}>
                                 {isGenerating ? (
-                                    statusMessage
+                                    <div className="flex items-center gap-2">
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        {statusMessage}
+                                    </div>
                                 ) : (
                                     <>
                                         <Hammer className='w-5 h-5' /> BUILD TOY
@@ -338,7 +343,14 @@ const ScanResultPage = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2 }}
                     className='relative w-full aspect-square'>
-                    <HologramViewer modelUrl={modelUrl ? getProxyUrl(modelUrl) : null} />
+                    <HologramViewer
+                        modelUrl={modelUrl ? getProxyUrl(modelUrl) : null}
+                        onLoaded={() => {
+                            setIsModelLoaded(true);
+                            setIsGenerating(false);
+                            setStatusMessage("Neural Uplink Stable.");
+                        }}
+                    />
                 </motion.div>
             </div>
         </div>
