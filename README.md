@@ -35,11 +35,12 @@
 
 ### 🎅 The "Real-World" Problem
 
-For centuries, the North Pole has relied on manual scroll-keeping and snail mail to manage billions of wishes annually. This legacy system suffered from:
+For centuries, the North Pole relied on a high-latency, analog infrastructure of manual scroll-keeping and physical mail. In a modern digital world, this legacy system eventually reached its breaking point, suffering from several critical bottlenecks:
 
 -   **Too Many Letters**: Santa gets millions of handwritten letters, and reading them all takes forever.
+-   **The "Mystery" Gift**: Kids didn't know exactly what they would get or what it would look like until Christmas morning.
 -   **Will It Fit?**: Sometimes kids ask for giant toys (like drum sets) without knowing if they'll actually fit in their room.
--   **Snail Mail is Slow**: If you do something nice right before Christmas, Santa might not hear about it in time using old mail!
+-   **No Direct Contact**: There was no way to talk to Santa in real-time. Kids never knew if they were on the Naughty or Nice list or how Santa felt about their behavior!
 
 ### 💡 The Solution
 
@@ -62,7 +63,8 @@ Explore the digital North Pole through these key terminals:
 The entry point for all authorized users.
 
 -   **Experience**: Users are greeted with festive "Jingle Bells" background music.
--   **Visuals**: Features high-fidelity 3D animations of Santa's flight path and interactive scrolling scenes.
+-   **Visuals**: Features high-fidelity 3D animations with Three.js of Santa's route path and interactive scrolling scenes.
+-   **Authentication**: Secure Firebase Google Auth enables simple join without any credentials.
 -   **Action**: Gateways to all other console features start here.
 
 ### 2. 📸 Letter Scanner
@@ -71,30 +73,30 @@ The entry point for all authorized users.
 The sophisticated input terminal for physical wishes.
 
 -   **Function**: Users scan their handwritten letters using the device camera or file upload.
--   **Process**: The image is securely transmitted directly to the Santa Factory database for analysis.
+-   **Process**: The letter content is recognized by our Gemini 2.5 Flash model, which extracts the letter sender's name, their emotional tone and sentiment, and the requested gift name.
 
 ### 3. 🧩 Magic Processing
 
 **File:** `client/src/pages/user/ScanResultPage.tsx`
 Where AI meets Christmas magic.
 
--   **Generation**: The system analyzes the letter's content and procedurally generates a 3D toy model representation.
--   **Approval**: Users review the generated toy. If it matches their heart's desire, they send it to the Elves for fabrication.
+-   **Generation**: The letter content is passed through the system and procedurally generates a 3D toy model representation using Tripo AI model.
+-   **Approval**: Users review the generated 3D toy model using an interactive Three.js animation viewer from all angles and can approve or reject to begin fabrication.
 
 ### 4. 📜 The Manifest
 
 **File:** `client/src/pages/user/ApprovedWishesPage.tsx`
 The official registry of granted requests.
 
--   **Tracking**: View all wishes that have been green-lit by the North Pole command.
--   **Status**: Monitor the fabrication status and access the AR preview access codes from here.
+-   **Tracking**: View all generated approved wishes status and lists of gifts.
+-   **Status**: Monitor the updates and fabrication progress for each approved wish.
 
 ### 5. 🪄 AR Room Preview
 
 **File:** `client/src/pages/user/SingleWishPage.tsx`
 Bringing the gift home (virtually) before Christmas.
 
--   **Elf Gamification**: Waiting for the build? Play a mini-game to boost the elves' energy and speed up production!
+-   **Elf Gamification**: Once Santa approves, the elves begin their work. While waiting for the build to complete, play a mini-game to boost the elves' energy and speed up production!
 -   **Augmented Reality**: Once built, project the 3D toy into your physical room.
 -   **Verification**: Ensure the gift fits on the shelf (or in the garage) using cutting-edge WebXR.
 
@@ -105,6 +107,16 @@ The direct line to the Big Guy.
 
 -   **Live Chat**: A secure, WebSocket-encrypted channel for real-time negotiation.
 -   **Status**: Discuss "Naughty/Nice" standing or update wish details instantly.
+
+### 7. 🎅 Santa Command Dashboard
+
+**File:** `client/src/pages/santa/SantaDashboard.tsx`
+The central command center for North Pole operations.
+
+-   **Overview**: Real-time dashboard displaying global wish fabrication status and logistics.
+-   **Statistics**: Monitor total wishes, pending reviews, production approvals, and naughty list entries.
+-   **Management**: Direct access to manage the wish queue and open communication channels.
+-   **Visual Interface**: Cyber-themed command OS interface with live status indicators and festive animations.
 
 ## 📹 Video Demonstrations
 
